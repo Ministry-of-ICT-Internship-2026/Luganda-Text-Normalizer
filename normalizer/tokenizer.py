@@ -60,6 +60,15 @@ _LUGANDA_WORD_RE = re.compile(r"[A-Za-zŋŊ]+(?:['’][A-Za-zŋŊ]+)*")
 # alphanumeric-only so Treebank's tokenizer has nothing in it to split on.
 _PLACEHOLDER_TAG = "XLGWRDX"
 
+# Rule 6 — substring restore, not exact-match restore.
+# NLTK can still glue stray punctuation directly onto a placeholder
+# (e.g. a leading quote before a protected word: "'XLGWRDX0" instead of
+# splitting into "'" + "XLGWRDX0"). An exact dict lookup on the whole
+# token would then miss it and leak the raw placeholder into the output.
+# Substituting the placeholder pattern WITHIN each token, rather than
+# requiring the token to equal the placeholder exactly, closes that gap.
+_PLACEHOLDER_FIND_RE = re.compile(rf"{_PLACEHOLDER_TAG}\d+")
+
 
 def tokenize(text, lowercase=False, normalize_apostrophe=True):
     """
@@ -104,7 +113,15 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
     rough_tokens = _nltk_word_tokenize(protected_text)
 
     # Rule 5 — restore: swap placeholders back for the real, protected words.
-    tokens = [placeholders.get(tok, tok) for tok in rough_tokens]
+    # Uses substring replacement (Rule 6) rather than exact-match, so a
+    # placeholder that NLTK left glued to stray punctuation still resolves
+    # correctly instead of leaking the raw placeholder string.
+    def _restore(tok):
+        return _PLACEHOLDER_FIND_RE.sub(
+            lambda m: placeholders[m.group(0)], tok
+        )
+
+    tokens = [_restore(tok) for tok in rough_tokens]
 
     if lowercase:
         tokens = [t.lower() for t in tokens]
@@ -123,3 +140,7 @@ def diagnose(sentence):
         "nltk_default": _nltk_word_tokenize(sentence),
         "custom_tokenize": tokenize(sentence),
     }
+
+
+
+    # Changes by Charis for testing
