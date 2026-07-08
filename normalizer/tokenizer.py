@@ -28,9 +28,24 @@ Docs, most phones, and most published Luganda text (autocorrect converts
     n'ekitabo   -> ["n'ekitabo"]              (straight quote: survives)
     n'ekitabo   -> ['n', '’', 'ekitabo']       (curly quote: destroyed)
 
+A SECOND breakage (found via test 05_abbreviation_period_not_sentence_end)
+appears once masking is introduced: NLTK relies on recognizing a small
+whitelist of known abbreviations (e.g. "Dr", "Mr", "Prof") to decide a
+trailing period isn't sentence-ending. Since our masking replaces words
+with placeholders BEFORE NLTK runs, NLTK no longer sees "Dr" — it sees
+an unfamiliar placeholder followed by a period, and splits the period
+off as its own token:
+
+    Dr. Musisi   -> expected ['Dr.', 'Musisi', ...]
+    Dr. Musisi   -> got      ['Dr', '.', 'Musisi', ...]   (bug)
+
+Fix: protect known abbreviations (word + trailing period, as one unit)
+the same way elision words are protected — mask them before NLTK ever
+sees the text, so there's no lone trailing period left to misread.
+
 Everything else (agglutination, geminate consonants like "ssomero", long
 vowels like "eddiini") is fine for NLTK at the word level, since those
-aren't punctuation. Only the apostrophe/quote case needs patching.
+aren't punctuation.
 """
 
 import re
@@ -49,12 +64,25 @@ __all__ = ["tokenize", "diagnose"]
 # ---------------------------------------------------------------------------
 # CUSTOM RULES
 # ---------------------------------------------------------------------------
+
 # Rule 1 — apostrophe-aware word boundary.
 # A Luganda "word" is letters (including ŋ/Ŋ), optionally chained with an
 # apostrophe (straight ' or curly ’) followed by more letters. This is what
 # lets "b'omu", "n'ekitabo", "Ng'enda" survive as ONE token instead of being
 # treated as separate words + stray punctuation.
-_LUGANDA_WORD_RE = re.compile(r"[A-Za-zŋŊ]+(?:['’][A-Za-zŋŊ]+)*")
+_LUGANDA_WORD_RE = r"[A-Za-zŋŊ]+(?:['’][A-Za-zŋŊ]+)*"
+
+# Rule 7 — known abbreviations (word + trailing period kept as ONE unit).
+# Extend this set as the team finds more real examples in the corpus.
+# Word boundary (\b) on the left prevents matching inside a longer word
+# (e.g. won't match "St" inside "Nsteesa").
+_ABBREVIATIONS = {"Dr", "Mr", "Mrs", "Ms", "Prof", "St", "Rev", "Gen", "Sgt"}
+_ABBREV_RE = r"\b(?:" + "|".join(re.escape(a) for a in _ABBREVIATIONS) + r")\."
+
+# Combined regex: try the abbreviation pattern first at each position, so
+# "Dr." is captured whole (word + period) before the plain word rule would
+# otherwise grab just "Dr" and leave a lone trailing period behind.
+_PROTECTED_RE = re.compile(rf"{_ABBREV_RE}|{_LUGANDA_WORD_RE}")
 
 # Placeholder tag used to shield matched words from NLTK. Deliberately
 # alphanumeric-only so Treebank's tokenizer has nothing in it to split on.
@@ -72,8 +100,9 @@ _PLACEHOLDER_FIND_RE = re.compile(rf"{_PLACEHOLDER_TAG}\d+")
 
 def tokenize(text, lowercase=False, normalize_apostrophe=True):
     """
-    Tokenize Luganda text, correcting NLTK's handling of the curly
-    apostrophe (’) in elision/ng' words.
+    Tokenize Luganda text, correcting NLTK's handling of:
+      - the curly apostrophe (’) in elision/ng' words, and
+      - known abbreviations (e.g. "Dr.") wrongly split from their period.
 
     Args:
         text: raw Luganda string.
@@ -86,7 +115,8 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
             token/vocabulary entry.
 
     Returns:
-        list[str] of tokens, with elided/ng' words kept intact.
+        list[str] of tokens, with elided/ng' words and abbreviations
+        kept intact.
     """
     if not text or not text.strip():
         return []
@@ -103,13 +133,14 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
         placeholders[key] = word
         return key
 
-    # Rule 3 — mask-before-tokenize: protect fragile words with placeholders
-    # BEFORE nltk ever sees them, instead of trying to patch its output after
-    # the fact (which is unreliable once a word has already been shredded).
-    protected_text = _LUGANDA_WORD_RE.sub(_stash, text)
+    # Rule 3 — mask-before-tokenize: protect fragile words/abbreviations
+    # with placeholders BEFORE nltk ever sees them, instead of trying to
+    # patch its output after the fact (unreliable once already shredded).
+    protected_text = _PROTECTED_RE.sub(_stash, text)
 
-    # Rule 4 — delegate everything else (commas, periods, numbers, quotes
-    # around whole phrases) to NLTK, which already handles it correctly.
+    # Rule 4 — delegate everything else (commas, sentence-ending periods,
+    # numbers, quotes around whole phrases) to NLTK, which already
+    # handles it correctly.
     rough_tokens = _nltk_word_tokenize(protected_text)
 
     # Rule 5 — restore: swap placeholders back for the real, protected words.
