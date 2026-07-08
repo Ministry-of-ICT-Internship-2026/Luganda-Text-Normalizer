@@ -143,10 +143,10 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
     # handles it correctly.
     rough_tokens = _nltk_word_tokenize(protected_text)
 
-    # Rule 5 — restore: swap placeholders back for the real, protected
-    # words. Uses substring replacement (Rule 6) rather than exact-match,
-    # so a placeholder that NLTK left glued to stray punctuation still
-    # resolves correctly instead of leaking the raw placeholder string.
+    # Rule 5 — restore: swap placeholders back for the real, protected words.
+    # Uses substring replacement (Rule 6) rather than exact-match, so a
+    # placeholder that NLTK left glued to stray punctuation still resolves
+    # correctly instead of leaking the raw placeholder string.
     def _restore(tok):
         return _PLACEHOLDER_FIND_RE.sub(
             lambda m: placeholders[m.group(0)], tok
@@ -171,3 +171,7 @@ def diagnose(sentence):
         "nltk_default": _nltk_word_tokenize(sentence),
         "custom_tokenize": tokenize(sentence),
     }
+
+
+
+    # Changes by Charis for testing
