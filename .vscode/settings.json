@@ -1,0 +1,8 @@
+{
+    "chat.agent.maxRequests": 100,
+    "chat.checkpoints.showFileChanges": true,
+    "git.openAfterClone": "alwaysNewWindow",
+    "python.analysis.extraPaths": [
+        "./normalizer"
+    ]
+}
