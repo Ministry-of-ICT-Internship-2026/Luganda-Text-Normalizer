@@ -1,176 +1,131 @@
 """
-morphology_nouns.py
-
-Sample Luganda nouns for testing the morphological root normaliser.
-Each entry provides the full word, its noun class, prefix, root, and meaning.
+morphology_nouns.py – Luganda noun-class prefix stripper.
 """
 
-MORPHOLOGY_NOUNS = {
-    # ========== Class 1/2: MU-BA (people) ==========
-    'omuntu': {
-        'class': 'MU-BA',
-        'prefix': 'omu',
-        'root': 'ntu',
-        'meaning': 'person'
-    },
-    'abantu': {
-        'class': 'MU-BA',
-        'prefix': 'aba',
-        'root': 'ntu',
-        'meaning': 'people'
-    },
-    'omusomesa': {
-        'class': 'MU-BA',
-        'prefix': 'omu',
-        'root': 'somesa',
-        'meaning': 'teacher'
-    },
-    'omwana': {
-        'class': 'MU-BA',
-        'prefix': 'omu',
-        'root': 'wana',
-        'meaning': 'child'
-    },
+import logging
+from typing import Tuple, Optional
 
-    # ========== Class 3/4: MU-MI (trees/plants) ==========
-    'omuti': {
-        'class': 'MU-MI',
-        'prefix': 'omu',
-        'root': 'ti',
-        'meaning': 'tree'
-    },
-    'emiti': {
-        'class': 'MU-MI',
-        'prefix': 'emi',
-        'root': 'ti',
-        'meaning': 'trees'
-    },
-    'omugaati': {
-        'class': 'MU-MI',
-        'prefix': 'omu',
-        'root': 'gaati',
-        'meaning': 'bread (loaf)'
-    },
+# Configure logging (optional – set to WARNING to reduce output)
+logging.basicConfig(level=logging.INFO)
+LOGGER = logging.getLogger(__name__)
 
-    # ========== Class 7/8: KI-BI (artifacts) ==========
-    'ekitabo': {
-        'class': 'KI-BI',
-        'prefix': 'eki',
-        'root': 'tabo',
-        'meaning': 'book'
-    },
-    'ebitabo': {
-        'class': 'KI-BI',
-        'prefix': 'ebi',
-        'root': 'tabo',
-        'meaning': 'books'
-    },
-    'ekibuga': {
-        'class': 'KI-BI',
-        'prefix': 'eki',
-        'root': 'buga',
-        'meaning': 'town, city'
-    },
-    'ekisenge': {
-        'class': 'KI-BI',
-        'prefix': 'eki',
-        'root': 'senge',
-        'meaning': 'room'
-    },
+class NounStripper:
+    """
+    Strips noun-class prefixes from Luganda nouns.
+    
+    Usage:
+        stripper = NounStripper()
+        root, prefix, class_id = stripper.strip('omuntu')
+        # root = 'ntu', prefix = 'omu', class_id = 'MU-BA'
+    """
 
-    # ========== Class 5/6: LI-MA (liquids, abstract) – for extension ==========
-    'erinnya': {
-        'class': 'LI-MA',
-        'prefix': 'eri',
-        'root': 'nnya',
-        'meaning': 'name'
-    },
-    'amazzi': {
-        'class': 'LI-MA',
-        'prefix': 'ama',
-        'root': 'zzi',
-        'meaning': 'water'
-    },
+    # ---------- Rules (easy to extend) ----------
+    # Each class: singular and plural prefixes
+    CLASS_RULES = {
+        'MU-BA': {'SG': ['omu', 'mu'], 'PL': ['aba', 'ba']},
+        'MU-MI': {'SG': ['omu', 'mu'], 'PL': ['emi', 'mi']},
+        'LI-MA': {'SG': ['eri', 'li'], 'PL': ['ama', 'ma']},
+        'KI-BI': {'SG': ['eki', 'ki'], 'PL': ['ebi', 'bi']},
+        'N':     {'SG': ['en', 'n'],   'PL': ['en', 'n']},
+        'LU-N':  {'SG': ['olu', 'lu'], 'PL': ['en', 'n']},
+        'KA-BU': {'SG': ['aka', 'ka'], 'PL': ['obu', 'bu']},
+        'BU':    {'SG': ['obu', 'bu'], 'PL': []},
+    }
 
-    # ========== Class 9/10: N (animals, borrowed words) – for extension ==========
-    'ente': {
-        'class': 'N',
-        'prefix': 'en',
-        'root': 'te',
-        'meaning': 'cow'
-    },
-    'enkoko': {
-        'class': 'N',
-        'prefix': 'en',
-        'root': 'koko',
-        'meaning': 'chicken'
-    },
+    # Words that look like they have a prefix but must NOT be stripped
+    FALSE_POSITIVES = {
+        'kikumi',   # 100 (not 10)
+        'kibuga',   # town (not chief's enclosure)
+        'musa',     # proper name
+        'muyaga',   # storm
+        'mwenge',   # beer
+    }
 
-    # ========== Class 11/10: LU-N (long/flexible objects) – for extension ==========
-    'oluggi': {
-        'class': 'LU-N',
-        'prefix': 'olu',
-        'root': 'ggi',
-        'meaning': 'door'
-    },
+    MIN_ROOT_LENGTH = 2  # safety: reject roots shorter than this
 
-    # ========== Class 12/14: KA-BU (diminutives/collectives) – for extension ==========
-    'akagaali': {
-        'class': 'KA-BU',
-        'prefix': 'aka',
-        'root': 'gaali',
-        'meaning': 'bicycle'
-    },
+    # ---------- Internals ----------
+    def __init__(self):
+        """Build a flat prefix map, sorted longest-first."""
+        self.prefix_map = []
+        for class_id, forms in self.CLASS_RULES.items():
+            for prefix in forms.get('SG', []):
+                self.prefix_map.append((prefix, class_id, 'SG'))
+            for prefix in forms.get('PL', []):
+                self.prefix_map.append((prefix, class_id, 'PL'))
+        # Sort so 'omu' matches before 'mu'
+        self.prefix_map.sort(key=lambda x: len(x[0]), reverse=True)
 
-    # ========== FALSE POSITIVES (words that look like they have a prefix but must NOT be stripped) ==========
-    'kikumi': {
-        'class': None,
-        'prefix': None,
-        'root': 'kikumi',
-        'meaning': '100 (should not become "kumi" = 10)'
-    },
-    'kibuga': {
-        'class': None,
-        'prefix': None,
-        'root': 'kibuga',
-        'meaning': 'town (should not become "buga" = chief\'s enclosure)'
-    },
-    'musa': {
-        'class': None,
-        'prefix': None,
-        'root': 'musa',
-        'meaning': 'grace / proper name'
-    },
-    'mwenge': {
-        'class': None,
-        'prefix': None,
-        'root': 'mwenge',
-        'meaning': 'beer (should not be stripped)'
-    },
-}
+    # ---------- Main method ----------
+    def strip(self, word: str) -> Tuple[str, Optional[str], Optional[str]]:
+        """
+        Strip a noun-class prefix if present and safe.
 
-# ---------- Helper functions ----------
-def get_root(word: str) -> str:
-    """Return the canonical root for a given noun."""
-    return MORPHOLOGY_NOUNS.get(word, {}).get('root', word)
+        Returns:
+            (root, matched_prefix, class_id)
+            If no safe strip, returns (word, None, None).
+        """
+        # 1. False-positive check
+        if word in self.FALSE_POSITIVES:
+            LOGGER.warning(f"BLOCKED: '{word}'")
+            return word, None, None
 
-def get_class(word: str) -> str:
-    """Return the noun class for a given noun."""
-    return MORPHOLOGY_NOUNS.get(word, {}).get('class', None)
+        # 2. Try each prefix (longest-first)
+        for prefix, class_id, _ in self.prefix_map:
+            if word.startswith(prefix):
+                root = word[len(prefix):]
 
-def get_prefix(word: str) -> str:
-    """Return the expected prefix for a given noun."""
-    return MORPHOLOGY_NOUNS.get(word, {}).get('prefix', None)
+                # 3. Safety: root must be long enough
+                if len(root) < self.MIN_ROOT_LENGTH:
+                    LOGGER.warning(f"SKIP: '{word}' -> root '{root}' too short")
+                    continue
 
-def get_meaning(word: str) -> str:
-    """Return the English meaning for a given noun."""
-    return MORPHOLOGY_NOUNS.get(word, {}).get('meaning', None)
+                # 4. Safety: root itself must not be a false positive
+                if root in self.FALSE_POSITIVES:
+                    LOGGER.warning(f"SKIP: '{word}' -> '{root}' is false positive")
+                    continue
 
-# ---------- Self-check ----------
+                LOGGER.info(f"STRIP: '{word}' -> '{root}' ({prefix} : {class_id})")
+                return root, prefix, class_id
+
+        # 5. No match
+        LOGGER.info(f"NO CHANGE: '{word}'")
+        return word, None, None
+
+# ---------- Self-test (runs when executed directly) ----------
 if __name__ == "__main__":
-    print(f"Loaded {len(MORPHOLOGY_NOUNS)} sample nouns.")
-    print("\nSample entries:")
-    for i, (word, data) in enumerate(list(MORPHOLOGY_NOUNS.items())[:10]):
-        cls = data.get('class') or 'FALSE-POS'
-        print(f"{i+1:2}. {word:15} -> {data['root']:8}  ({cls})  {data['meaning']}")
-    print("\nSelf-check: OK.")
+    # Minimal test data – you can replace with your full list
+    TEST_WORDS = {
+        'omuntu':   ('ntu', 'omu', 'MU-BA'),
+        'abantu':   ('ntu', 'aba', 'MU-BA'),
+        'ekitabo':  ('tabo', 'eki', 'KI-BI'),
+        'amazzi':   ('zzi', 'ama', 'LI-MA'),
+        'ente':     ('te', 'en', 'N'),
+        'oluggi':   ('ggi', 'olu', 'LU-N'),
+        'akagaali': ('gaali', 'aka', 'KA-BU'),
+        'obulimi':  ('limi', 'obu', 'BU'),
+        'kikumi':   ('kikumi', None, None),   # blocked
+        'mwa':      ('mwa', None, None),      # too short
+    }
+
+    stripper = NounStripper()
+    print("\n" + "=" * 50)
+    print("SELF-TEST")
+    print("=" * 50)
+
+    passed = 0
+    for word, (exp_root, exp_prefix, exp_class) in TEST_WORDS.items():
+        root, prefix, class_id = stripper.strip(word)
+        ok = (root == exp_root and prefix == exp_prefix and class_id == exp_class)
+        if ok:
+            print(f"✓ PASS {word:15} -> {root:10}")
+            passed += 1
+        else:
+            print(f"✗ FAIL {word:15} -> {root:10}  expected: {exp_root}")
+
+    print("=" * 50)
+    print(f"Passed: {passed}/{len(TEST_WORDS)}")
+    if passed == len(TEST_WORDS):
+        print("✅ All tests passed!")
+    else:
+        print("❌ Some tests failed.")
+    print("=" * 50)
