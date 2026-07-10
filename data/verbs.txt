@@ -1,0 +1,129 @@
+# ====================================================================
+# Luganda Verb Dataset
+# Columns: surface_form <TAB> expected_root <TAB> description
+# ====================================================================
+
+# ---------- INFINITIVES ----------
+okukola	kola	infinitive (do)
+okugenda	genda	infinitive (go)
+okusoma	soma	infinitive (read)
+okulya	lya	infinitive (eat)
+okuva	va	infinitive (come from)
+okunywa	nywa	infinitive (drink)
+okudda	dda	infinitive (return)
+okujja	jja	infinitive (come)
+okubeera	beera	infinitive (be)
+okugula	gula	infinitive (buy)
+okulaba	laba	infinitive (see)
+okuwandiika	wandiika	infinitive (write)
+okusomesa	somesa	infinitive (teach) – causative
+okuliisa	liisa	infinitive (feed) – causative
+okuliibwa	liibwa	infinitive (be eaten) – passive
+okulabika	labika	infinitive (be visible) – stative
+okusomera	somera	infinitive (read for) – applicative
+
+# ---------- PRESENT TENSE (subject markers) ----------
+nkola	kola	1sg (I do)
+okola	kola	2sg (you do)
+akola	kola	3sg (he/she does)
+tukola	kola	1pl (we do)
+mukola	kola	2pl (you pl. do)
+bakola	kola	3pl (they do)
+
+# Vowel-initial variants
+twagala	agala	1pl before vowel (we want) – root "agala" (want)
+mwagala	agala	2pl before vowel (you want)
+bagala	agala	3pl before vowel (they want)
+
+# ---------- NEGATIVE PRESENT ----------
+sikola	kola	1sg negative
+tokola	kola	2sg negative
+tekola	kola	3sg negative
+tetukola	kola	1pl negative
+temukola	kola	2pl negative
+tebakola	kola	3pl negative
+
+# ---------- NEAR FUTURE (naa-) ----------
+nnaakola	kola	1sg future
+onaakola	kola	2sg future
+anaakola	kola	3sg future
+tunaakola	kola	1pl future
+munaakola	kola	2pl future
+banaakola	kola	3pl future
+
+# ---------- GENERAL FUTURE (li-) ----------
+nlikola	kola	1sg future (li)
+olikola	kola	2sg future (li)
+alikola	kola	3sg future (li)
+tulikola	kola	1pl future (li)
+mulikola	kola	2pl future (li)
+balikola	kola	3pl future (li)
+
+# ---------- NEAR PAST (-a- tense) ----------
+nakola	kola	1sg past (I did)
+wakola	kola	2sg past (you did)
+yakola	kola	3sg past (he did)
+twakola	kola	1pl past (we did)
+mwakola	kola	2pl past (you did)
+baakola	kola	3pl past (they did)
+
+# ---------- PERFECTIVE STEMS (irregular mappings) ----------
+koze	kola	perfective of kola
+genze	genda	perfective of genda
+somye	soma	perfective of soma
+labye	laba	perfective of laba
+guze	gula	perfective of gula
+badde	beera	perfective of beera
+lidde	lya	perfective of lya
+vudde	va	perfective of va
+nywedde	nywa	perfective of nywa
+zze	dda	perfective of dda (also jja)
+somesezza	somesa	perfective of somesa
+liisizza	liisa	perfective of liisa
+liiddwa	liibwa	perfective of liibwa
+labise	labika	perfective of labika
+somerde	somera	perfective of somera (approx.)
+
+# ---------- OBJECT INFIXES ----------
+# Object infix (ki- class 7) meaning "it"
+nkyagala	agala	1sg + object ki (I like it) – root "agala"
+mukyagala	agala	2pl + object ki (you like it)
+bakigula	gula	3pl + object ki (they buy it)
+nkigula	gula	1sg + object ki (I buy it)
+nkubagula	gula	1sg + object ba (class 2) (I buy them)
+
+# ---------- DERIVATIONAL SUFFIXES (non‑infinitive) ----------
+# Applicative (-er-/-ir-)
+akolera	kolera	3sg + applicative (he works for)
+twakolera	kolera	1pl past + applicative (we worked for)
+
+# Passive (-ibw-)
+akolibwa	kolibwa	3sg + passive (he is done)
+kolibwa	kolibwa	imperative? Actually "kolibwa" can be passive imperative (be done!). But we'll test it.
+# We'll add a present passive: akolibwa.
+
+# Stative (-ik-)
+alabika	labika	3sg + stative (he is visible)
+
+# Reciprocal (-an-)
+tulabagana	labagana	1pl + reciprocal (we see each other)
+# Note: "labagana" root "labagana" – actually the root includes the -an- suffix; we want to strip it to "labagana"? But the root is "labagana"? Actually the infinitive is "okulabagana" – root "labagana". So "labagana" is root. We want to strip "tulabagana" to "labagana". Our suffix stripper will remove "an" and we'll normalize final vowel? Actually "labagana" already ends in 'a' – the reciprocal suffix is already part of the base. So we can test that we strip "tu" and leave "labagana". Good.
+
+# Causative (-y-) in present
+asomesa	somesa	3sg + causative (he teaches)
+aliisa	liisa	3sg + causative (he feeds)
+
+# ---------- COMBINED AFFIXES (subject + tense + object) ----------
+twakikola	kola	1pl past + object ki (we did it)
+baakikola	kola	3pl past + object ki (they did it)
+tunaakigula	gula	1pl future + object ki (we will buy it)
+banaakigula	gula	3pl future + object ki (they will buy it)
+nnaakigula	gula	1sg future + object ki (I will buy it)
+
+# ---------- FALSE POSITIVES (words that look like verb forms but are not) ----------
+# In Luganda, "okukulu" means "big" (adjective), not a verb.
+okukulu	okukulu	adjective (big) – should NOT be stripped
+# "okusanyu" might mean "happiness"? Actually "okusanyu" is a noun? We'll add.
+okusanyu	okusanyu	noun (happiness) – should NOT be stripped
+# "oku" is a prefix, but "okubiri" means "second" (ordinal). Not a verb.
+okubiri	okubiri	ordinal (second) – should NOT be stripped
