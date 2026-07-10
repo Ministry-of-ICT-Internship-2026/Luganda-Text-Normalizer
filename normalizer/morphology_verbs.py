@@ -1,140 +1,85 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-morphology_verbs.py
-
-Sample Luganda verbs for testing the morphological root normaliser.
-Each entry provides the infinitive, canonical root, perfective stem, meaning, and verb type.
+morphology_verbs.py – Simple verb prefix stripper (function-based).
 """
 
-MORPHOLOGY_VERBS = {
-    # ========== Regular verbs ==========
-    'okukola': {
-        'root': 'kola',
-        'perfective': 'koze',
-        'meaning': 'do, make',
-        'type': 'regular'
-    },
-    'okugenda': {
-        'root': 'genda',
-        'perfective': 'genze',
-        'meaning': 'go',
-        'type': 'regular'
-    },
-    'okusoma': {
-        'root': 'soma',
-        'perfective': 'somye',
-        'meaning': 'read, study',
-        'type': 'regular'
-    },
-    'okulaba': {
-        'root': 'laba',
-        'perfective': 'labye',
-        'meaning': 'see',
-        'type': 'regular'
-    },
-    'okugula': {
-        'root': 'gula',
-        'perfective': 'guze',
-        'meaning': 'buy',
-        'type': 'regular'
-    },
-    'okubeera': {
-        'root': 'beera',
-        'perfective': 'badde',
-        'meaning': 'be, remain',
-        'type': 'regular'
-    },
+from typing import Tuple, List
 
-    # ========== Monosyllabic verbs (irregular perfective) ==========
-    'okulya': {
-        'root': 'lya',
-        'perfective': 'lidde',
-        'meaning': 'eat',
-        'type': 'monosyllabic'
-    },
-    'okuva': {
-        'root': 'va',
-        'perfective': 'vudde',
-        'meaning': 'come/go from',
-        'type': 'monosyllabic'
-    },
-    'okunywa': {
-        'root': 'nywa',
-        'perfective': 'nywedde',
-        'meaning': 'drink',
-        'type': 'monosyllabic'
-    },
-    'okudda': {
-        'root': 'dda',
-        'perfective': 'zze',
-        'meaning': 'return',
-        'type': 'monosyllabic'
-    },
+# ----- Prefix lists (longer first to avoid conflicts) -----
+INFINITIVE = 'oku'
 
-    # ========== Causative verbs (derivational suffix -y-) ==========
-    'okusomesa': {
-        'root': 'somesa',
-        'perfective': 'somesezza',
-        'meaning': 'teach (cause to read)',
-        'type': 'causative'
-    },
-    'okuliisa': {
-        'root': 'liisa',
-        'perfective': 'liisizza',
-        'meaning': 'feed (cause to eat)',
-        'type': 'causative'
-    },
+NEGATIVE = ['tetu', 'temu', 'teba', 'te', 'to', 'si']
 
-    # ========== Passive verbs ==========
-    'okuliibwa': {
-        'root': 'liibwa',
-        'perfective': 'liiddwa',
-        'meaning': 'be eaten',
-        'type': 'passive'
-    },
+SUBJECT = ['tw', 'tu', 'mw', 'mu', 'b', 'ba', 'n', 'o', 'a']
 
-    # ========== Stative verbs ==========
-    'okulabika': {
-        'root': 'labika',
-        'perfective': 'labise',
-        'meaning': 'be visible',
-        'type': 'stative'
-    },
+TENSE = ['naa', 'na', 'li', 'a']
 
-    # ========== Applicative verbs ==========
-    'okusomera': {
-        'root': 'somera',
-        'perfective': 'somerde',
-        'meaning': 'read for/on behalf of',
-        'type': 'applicative'
-    },
-}
-
-# ---------- Helper functions ----------
-def get_root(infinitive: str) -> str:
-    """Return the canonical root for a given verb infinitive."""
-    return MORPHOLOGY_VERBS.get(infinitive, {}).get('root', infinitive)
-
-def get_perfective(infinitive: str) -> str:
-    """Return the perfective stem for a given verb infinitive."""
-    return MORPHOLOGY_VERBS.get(infinitive, {}).get('perfective', None)
-
-def get_meaning(infinitive: str) -> str:
-    """Return the English meaning for a given verb infinitive."""
-    return MORPHOLOGY_VERBS.get(infinitive, {}).get('meaning', None)
-
-def get_type(infinitive: str) -> str:
-    """Return the verb type (regular, monosyllabic, etc.)."""
-    return MORPHOLOGY_VERBS.get(infinitive, {}).get('type', None)
-
-def list_by_type(verb_type: str) -> list:
-    """Return a list of infinitives that match a given type."""
-    return [inf for inf, data in MORPHOLOGY_VERBS.items() if data.get('type') == verb_type]
+OBJECT = ['mu', 'ba', 'mi', 'bi', 'ki', 'li', 'ma']
 
 
-# ---------- Self-check ----------
+def strip_verb(word: str) -> Tuple[str, List[str]]:
+    """
+    Strip verb prefixes.
+    Returns: (root, list_of_removed_parts)
+    """
+    mod = word
+    removed = []
+
+    # 1. Infinitive
+    if mod.startswith(INFINITIVE):
+        mod = mod[3:]
+        removed.append('infinitive:oku')
+
+    # 2. Negative
+    for p in NEGATIVE:
+        if mod.startswith(p):
+            mod = mod[len(p):]
+            removed.append(f'negative:{p}')
+            break
+
+    # 3. Subject
+    for p in SUBJECT:
+        if mod.startswith(p) and len(mod) > len(p):
+            mod = mod[len(p):]
+            removed.append(f'subject:{p}')
+            break
+
+    # 4. Tense
+    for p in TENSE:
+        if mod.startswith(p) and len(mod) > len(p) + 1:
+            mod = mod[len(p):]
+            removed.append(f'tense:{p}')
+            break
+
+    # 5. Object
+    for p in OBJECT:
+        if mod.startswith(p) and len(mod) > len(p) + 1:
+            mod = mod[len(p):]
+            removed.append(f'object:{p}')
+            break
+
+    return mod, removed
+
+
+# ----- Self-test -----
 if __name__ == "__main__":
-    print(f"Loaded {len(MORPHOLOGY_VERBS)} sample verbs.")
-    print("\nSample entries:")
-    for i, (inf, data) in enumerate(list(MORPHOLOGY_VERBS.items())[:10]):
-        print(f"{i+1:2}. {inf:20} -> root: {data['root']:8}  perfective: {data['perfective']:12} ({data['type']})")
-    print("\nSelf-check: OK.")
+    tests = [
+        ('okukola', 'kola'),
+        ('nkola', 'kola'),
+        ('sikola', 'kola'),
+        ('nnaakola', 'kola'),
+        ('nkyagala', 'agala'),
+        ('twakikola', 'kola'),
+    ]
+
+    print("\n" + "=" * 40)
+    print("VERB STRIPPER (FUNCTION) – TEST")
+    print("=" * 40)
+
+    for word, expected in tests:
+        root, removed = strip_verb(word)
+        ok = "✅" if root == expected else "❌"
+        print(f"{ok} {word:12} -> {root:8}  {removed}")
+
+    print("=" * 40)
