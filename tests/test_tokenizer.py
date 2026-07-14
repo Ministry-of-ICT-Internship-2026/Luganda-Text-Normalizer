@@ -143,6 +143,8 @@ EXTREME_CASES = [
     {
         "name": "12_tabs_and_blank_lines_between_elisions",
         "input": "Ky'oyagala\tkye ki?\n\nN'ekyo kye njagala.",
+    }
+]
 DEEP_CASES = [
     {
         "name": "01_tone_marked_diacritic_vowels",

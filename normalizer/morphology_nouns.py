@@ -5,22 +5,22 @@ morphology_nouns.py – Luganda noun-class prefix stripper.
 import logging
 from typing import Tuple, Optional
 
-# Configure logging (optional – set to WARNING to reduce output)
+from normalizer.stopwords import CLOSED_CLASS
+
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger(__name__)
+
 
 class NounStripper:
     """
     Strips noun-class prefixes from Luganda nouns.
-    
+
     Usage:
         stripper = NounStripper()
         root, prefix, class_id = stripper.strip('omuntu')
         # root = 'ntu', prefix = 'omu', class_id = 'MU-BA'
     """
 
-    # ---------- Rules (easy to extend) ----------
-    # Each class: singular and plural prefixes
     CLASS_RULES = {
         'MU-BA': {'SG': ['omu', 'mu'], 'PL': ['aba', 'ba']},
         'MU-MI': {'SG': ['omu', 'mu'], 'PL': ['emi', 'mi']},
@@ -34,52 +34,46 @@ class NounStripper:
 
     # Words that look like they have a prefix but must NOT be stripped
     FALSE_POSITIVES = {
-        'kikumi',   # 100 (not 10)
-        'kibuga',   # town (not chief's enclosure)
-        'musa',     # proper name
-        'muyaga',   # storm
-        'mwenge',   # beer
+        'kikumi',    # 100
+        'kibuga',    # town
+        'musa',      # proper name
+        'muyaga',    # storm
+        'mwenge',    # beer
+        'bizineesi', # "business" — loanword, bi- is not a class prefix here
     }
 
-    MIN_ROOT_LENGTH = 2  # safety: reject roots shorter than this
+    MIN_ROOT_LENGTH = 2
 
-    # ---------- Internals ----------
     def __init__(self):
-        """Build a flat prefix map, sorted longest-first."""
         self.prefix_map = []
         for class_id, forms in self.CLASS_RULES.items():
             for prefix in forms.get('SG', []):
                 self.prefix_map.append((prefix, class_id, 'SG'))
             for prefix in forms.get('PL', []):
                 self.prefix_map.append((prefix, class_id, 'PL'))
-        # Sort so 'omu' matches before 'mu'
         self.prefix_map.sort(key=lambda x: len(x[0]), reverse=True)
 
-    # ---------- Main method ----------
     def strip(self, word: str) -> Tuple[str, Optional[str], Optional[str]]:
         """
         Strip a noun-class prefix if present and safe.
-
-        Returns:
-            (root, matched_prefix, class_id)
-            If no safe strip, returns (word, None, None).
+        Returns (root, matched_prefix, class_id), or (word, None, None).
         """
-        # 1. False-positive check
+        if word in CLOSED_CLASS:
+            LOGGER.info(f"CLOSED-CLASS, SKIP: '{word}'")
+            return word, None, None
+
         if word in self.FALSE_POSITIVES:
             LOGGER.warning(f"BLOCKED: '{word}'")
             return word, None, None
 
-        # 2. Try each prefix (longest-first)
         for prefix, class_id, _ in self.prefix_map:
             if word.startswith(prefix):
                 root = word[len(prefix):]
 
-                # 3. Safety: root must be long enough
                 if len(root) < self.MIN_ROOT_LENGTH:
                     LOGGER.warning(f"SKIP: '{word}' -> root '{root}' too short")
                     continue
 
-                # 4. Safety: root itself must not be a false positive
                 if root in self.FALSE_POSITIVES:
                     LOGGER.warning(f"SKIP: '{word}' -> '{root}' is false positive")
                     continue
@@ -87,13 +81,13 @@ class NounStripper:
                 LOGGER.info(f"STRIP: '{word}' -> '{root}' ({prefix} : {class_id})")
                 return root, prefix, class_id
 
-        # 5. No match
         LOGGER.info(f"NO CHANGE: '{word}'")
         return word, None, None
 
+"""
+
 # ---------- Self-test (runs when executed directly) ----------
 if __name__ == "__main__":
-    # Minimal test data – you can replace with your full list
     TEST_WORDS = {
         'omuntu':   ('ntu', 'omu', 'MU-BA'),
         'abantu':   ('ntu', 'aba', 'MU-BA'),
@@ -103,8 +97,11 @@ if __name__ == "__main__":
         'oluggi':   ('ggi', 'olu', 'LU-N'),
         'akagaali': ('gaali', 'aka', 'KA-BU'),
         'obulimi':  ('limi', 'obu', 'BU'),
-        'kikumi':   ('kikumi', None, None),   # blocked
-        'mwa':      ('mwa', None, None),      # too short
+        'kikumi':   ('kikumi', None, None),
+        'mwa':      ('mwa', None, None),
+        'abamu':    ('abamu', None, None),
+        'nga':      ('nga', None, None),
+        'bizineesi':('bizineesi', None, None),
     }
 
     stripper = NounStripper()
@@ -124,8 +121,7 @@ if __name__ == "__main__":
 
     print("=" * 50)
     print(f"Passed: {passed}/{len(TEST_WORDS)}")
-    if passed == len(TEST_WORDS):
-        print("✅ All tests passed!")
-    else:
-        print("❌ Some tests failed.")
+    print("✅ All tests passed!" if passed == len(TEST_WORDS) else "❌ Some tests failed.")
     print("=" * 50)
+
+    """
