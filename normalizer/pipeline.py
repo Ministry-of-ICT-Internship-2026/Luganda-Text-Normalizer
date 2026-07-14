@@ -9,12 +9,12 @@ from normalizer.morphology_verbs import VerbStripper
 
 def normalize(text: str) -> str:
     text = clean_text(text)
-    text = expand_elisions(text)      # split n'X -> na X before tokenizing
-    text = normalize_diacritics(text)
+    text = normalize_diacritics(text)   # canonicalize chars (incl. apostrophe variants) first
+    text = expand_elisions(text)        # now safely splits n'X -> na X on canonical apostrophes
 
     tokens = tokenize(text)
-    tokens = standardize_tokens(tokens)
-    tokens = [t.lower() for t in tokens]  # prefix lists are lowercase-only
+    tokens = [t.lower() for t in tokens]  # lower BEFORE any lowercase-keyed lookup step
+    tokens = standardize_tokens(tokens)   # spelling dict lookups now match reliably
 
     noun_stripper = NounStripper()
     verb_stripper = VerbStripper()

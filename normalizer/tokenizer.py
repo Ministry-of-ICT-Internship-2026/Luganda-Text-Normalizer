@@ -70,7 +70,13 @@ __all__ = ["tokenize", "diagnose"]
 # apostrophe (straight ' or curly ’) followed by more letters. This is what
 # lets "b'omu", "n'ekitabo", "Ng'enda" survive as ONE token instead of being
 # treated as separate words + stray punctuation.
-_LUGANDA_WORD_RE = r"[A-Za-zŋŊ]+(?:['’][A-Za-zŋŊ]+)*"
+#
+# NOTE: requires AT LEAST ONE apostrophe-group ('+' not '*'). See
+# tests/test_tokenizer_deep.py case 05 — using '*' here meant every plain
+# word (no apostrophe at all) got needlessly routed through the placeholder
+# masking system, which hid known abbreviations like "Dr" from NLTK's own
+# abbreviation list and broke "Dr." -> caused it to split into "Dr" + ".".
+_LUGANDA_WORD_RE = r"[A-Za-zŋŊ]+(?:['’][A-Za-zŋŊ]+)+"
 
 # Rule 7 — known abbreviations (word + trailing period kept as ONE unit).
 # Extend this set as the team finds more real examples in the corpus.
@@ -171,7 +177,3 @@ def diagnose(sentence):
         "nltk_default": _nltk_word_tokenize(sentence),
         "custom_tokenize": tokenize(sentence),
     }
-
-
-
-    # Changes by Charis for testing
