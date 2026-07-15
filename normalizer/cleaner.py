@@ -12,11 +12,14 @@ sign-off and belong in normalize_diacritics(), a separate function built
 after that review happens.
 
 Each rule below is traceable back to a specific log entry (see docstring
-references to log IDs #1-#7).
+references to log IDs #1-#7). Number-spacing and emoji handling are now
+implemented in edge_cases.py (Sprint 2) and imported here.
 """
 
 import re
 import unicodedata
+
+from .edge_cases import fix_number_word_spacing, extract_emoji
 
 # --- Quote / punctuation character maps -------------------------------------
 
@@ -78,13 +81,6 @@ def collapse_repeated_punctuation(text: str, max_repeat: int = 1) -> str:
     return re.sub(r"([!?.])\1+", _collapse, text)
 
 
-def fix_number_word_spacing(text: str) -> str:
-    """Insert a space between a digit and an immediately following letter,
-    e.g. "58Baliraanwa" -> "58 Baliraanwa". (log #10)
-    """
-    return re.sub(r"(\d)([A-Za-zÀ-ÿ])", r"\1 \2", text)
-
-
 def collapse_whitespace(text: str) -> str:
     """Collapse runs of spaces/tabs to one space, and collapse 3+ newlines
     (irregular mid-sentence breaks, log #2) down to a single paragraph break,
@@ -99,7 +95,7 @@ def collapse_whitespace(text: str) -> str:
     return text.strip()
 
 
-def clean_text(text: str, collapse_punctuation: bool = True) -> str:
+def clean_text(text: str, collapse_punctuation: bool = True, strip_emoji: bool = True) -> str:
     """Run the full Bucket A cleaning pipeline in order.
 
     NOTE: This function intentionally does NOT strip stray non-Luganda
@@ -109,11 +105,16 @@ def clean_text(text: str, collapse_punctuation: bool = True) -> str:
     generic rule. Handle known scraping artifacts with a source-specific
     pre-filter before calling clean_text(), rather than baking a guess into
     the shared pipeline.
+
+    Mixed-language text (English words embedded in Luganda) is left
+    untouched by every step below — see edge_cases.py for the reasoning.
     """
     text = normalize_unicode(text)
     text = strip_control_characters(text)
     text = standardize_quotes_and_dashes(text)
     text = fix_number_word_spacing(text)
+    if strip_emoji:
+        text, _ = extract_emoji(text)
     text = fix_spacing_before_punctuation(text)
     if collapse_punctuation:
         text = collapse_repeated_punctuation(text)

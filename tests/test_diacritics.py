@@ -13,7 +13,7 @@ Two kinds of tests here on purpose:
 Run with: pytest test_normalize_diacritics.py -v
 """
 
-from normalize_diacritics import (
+from normalizer.diacritics import (
     normalize_diacritics,
     list_pending_reviews,
     add_confirmed_variant,

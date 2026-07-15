@@ -5,7 +5,7 @@ P1_Research_Log.xlsx, using the real text snippets that surfaced the issue.
 Run with: pytest test_clean_text.py -v
 """
 
-from clean_text import (
+from normalizer.cleaner import (
     clean_text,
     fix_spacing_before_punctuation,
     collapse_repeated_punctuation,
