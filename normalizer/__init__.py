@@ -95,10 +95,10 @@ standalone top-level module and depends on this exact behaviour.
 """
 
 # --- Full pipeline ----------------------------------------------------------
-from .pipeline import normalize
+from normalizer.pipeline import normalize
 
 # --- Cleaning -----------------------------------------------------------
-from .cleaner import (
+from normalizer.cleaner import (
     clean_text,
     normalize_unicode,
     strip_control_characters,
@@ -109,17 +109,17 @@ from .cleaner import (
 )
 
 # --- Elisions -------------------------------------------------------------
-from .contractions import expand_elisions
+from normalizer.contractions import expand_elisions
 
 # --- Diacritics -----------------------------------------------------------
-from .diacritics import (
+from normalizer.diacritics import (
     normalize_diacritics,
     list_pending_reviews,
     add_confirmed_variant,
 )
 
 # --- Social-text / numeric edge cases --------------------------------------
-from .edge_cases import (
+from normalizer.edge_cases import (
     fix_number_word_spacing,
     find_numeric_entities,
     extract_emoji,
@@ -127,18 +127,51 @@ from .edge_cases import (
     handle_social_edge_cases,
 )
 
+# --- Abbreviation / acronym expansion ---------------------------------------
+from normalizer.abbreviations import load_abbreviations, expand_abbreviations
+
+# --- Currency normalization ---------------------------------------------------
+from normalizer.currency import (
+    find_currency_entities,
+    normalize_currency_format,
+    amount_to_words,
+    expand_currency_to_words,
+)
+
+# --- Date / time expansion ----------------------------------------------------
+from normalizer.datetime import (
+    weekday_name,
+    month_name,
+    date_to_words,
+    time_to_words,
+    expand_dates,
+    expand_times,
+    expand_datetimes,
+)
+
+# --- Number-to-words expansion -------------------------------------------------
+from normalizer.numbers import number_to_words, expand_numbers, NumberTooLargeError
+
 # --- Tokenization -----------------------------------------------------------
-from .tokenizer import tokenize, diagnose
+from normalizer.tokenizer import tokenize, diagnose
 
 # --- Spelling standardization -----------------------------------------------
-from .spelling import load_dictionary, standardize_spelling, standardize_tokens
+from normalizer.spelling import load_dictionary, standardize_spelling, standardize_tokens
 
 # --- Morphology -------------------------------------------------------------
-from .morphology_nouns import NounStripper
-from .morphology_verbs import VerbStripper
+from normalizer.morphology_nouns import NounStripper
+from normalizer.morphology_verbs import VerbStripper
+
+# --- Code-switching detection -------------------------------------------------
+from normalizer.codeswitching import (
+    tag_token,
+    tag_tokens,
+    has_code_switching,
+    annotate_code_switching,
+)
 
 # --- Stopwords / closed-class words -----------------------------------------
-from .stopwords import CLOSED_CLASS
+from normalizer.stopwords import CLOSED_CLASS
 
 __all__ = [
     # pipeline
@@ -163,6 +196,26 @@ __all__ = [
     "extract_emoji",
     "extract_hashtags_and_mentions",
     "handle_social_edge_cases",
+    # abbreviations
+    "load_abbreviations",
+    "expand_abbreviations",
+    # currency
+    "find_currency_entities",
+    "normalize_currency_format",
+    "amount_to_words",
+    "expand_currency_to_words",
+    # datetime_expand
+    "weekday_name",
+    "month_name",
+    "date_to_words",
+    "time_to_words",
+    "expand_dates",
+    "expand_times",
+    "expand_datetimes",
+    # numbers
+    "number_to_words",
+    "expand_numbers",
+    "NumberTooLargeError",
     # tokenizer
     "tokenize",
     "diagnose",
@@ -173,6 +226,11 @@ __all__ = [
     # morphology
     "NounStripper",
     "VerbStripper",
+    # code_switching
+    "tag_token",
+    "tag_tokens",
+    "has_code_switching",
+    "annotate_code_switching",
     # stopwords
     "CLOSED_CLASS",
 ]

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "luganda-normalizer"
 version = "1.0.0"
-description = "Preprocessing utilities (cleaning, elision expansion, tokenization, spelling standardization, noun/verb morphology stripping) for Luganda NLP pipelines."
+description = "Preprocessing utilities (cleaning, elision expansion, abbreviation/acronym expansion, currency and date/time expansion, number-to-words expansion, tokenization, spelling standardization, noun/verb morphology stripping, code-switching detection) for Luganda NLP pipelines."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
@@ -31,4 +31,4 @@ Repository = "https://github.com/Ministry-of-ICT-Internship-2026/Luganda-Text-No
 packages = ["normalizer"]
 
 [tool.setuptools.package-data]
-normalizer = ["spelling_dictionary.json"]
+normalizer = ["spelling_dictionary.json", "abbreviations_dictionary.json", "lexicon_data/*.txt"]

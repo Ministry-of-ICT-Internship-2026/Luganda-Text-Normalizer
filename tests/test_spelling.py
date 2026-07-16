@@ -15,7 +15,7 @@ import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-import standardize_spelling as ss
+from normalizer import spelling as ss
 
 
 # ---------------------------------------------------------------------------

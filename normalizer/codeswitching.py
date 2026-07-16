@@ -15,8 +15,11 @@ Lexicon-based, not a generic English-dictionary lookup (none is
 bundled -- see DOCUMENTED LIMITATION below). A token is tagged:
 
     "LUG"  -- found in the project's known-Luganda word lists
-              (data/nouns.txt, data/verbs.txt, stopwords.CLOSED_CLASS,
-              spelling_dictionary.json keys+values)
+              (a packaged copy of data/nouns.txt and data/verbs.txt --
+              see normalizer/lexicon_data/, kept in sync manually with
+              the canonical copies under data/ -- plus
+              stopwords.CLOSED_CLASS and spelling_dictionary.json
+              keys+values)
     "ENG"  -- found in a small curated common-English-word list bundled
               in this module
     "NUM"  -- purely numeric
@@ -47,7 +50,7 @@ from functools import lru_cache
 
 from .stopwords import CLOSED_CLASS
 
-_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
+_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lexicon_data")
 
 # Small, curated set of very common English words likely to appear via
 # code-switching in Luganda social/news text. NOT an exhaustive English

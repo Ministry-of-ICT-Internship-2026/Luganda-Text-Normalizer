@@ -43,9 +43,9 @@ from normalizer.morphology_nouns import NounStripper
 from normalizer.morphology_verbs import VerbStripper
 from normalizer.abbreviations import expand_abbreviations
 from normalizer.currency import expand_currency_to_words
-from normalizer.datetime_expand import expand_datetimes
+from normalizer.datetime import expand_datetimes
 from normalizer.numbers import expand_numbers
-from normalizer.edge_cases import PHONE_NUMBER_RE
+import normalizer.edge_cases
 
 
 def normalize(
@@ -67,7 +67,7 @@ def normalize(
     if expand_dates_times:
         text = expand_datetimes(text)           # before number expansion -- consumes date/time digits
     if expand_nums:
-        phone_spans = [m.span() for m in PHONE_NUMBER_RE.finditer(text)]
+        phone_spans = [m.span() for m in normalizer.edge_cases.PHONE_NUMBER_RE.finditer(text)]
         text = expand_numbers(text, skip_spans=phone_spans)
 
     tokens = tokenize(text)

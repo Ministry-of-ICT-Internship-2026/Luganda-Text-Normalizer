@@ -1,0 +1,317 @@
+# ====================================================================
+# Luganda Verb Dataset Extension
+# Columns: surface_form <TAB> expected_root <TAB> description
+# ====================================================================
+
+
+# ============================================================
+# COMMON INFINITIVES
+# ============================================================
+
+okukola	kola	do/work
+okugenda	genda	go
+okujja	jja	come
+okudda	dda	return
+okulaba	laba	see
+okusoma	soma	read/study
+okuwandiika	wandiika	write
+okusoma	soma	study
+okuyiga	yiga	learn
+okuyamba	yamba	help
+okukuba	kuba	hit
+okukwata	kwata	hold/catch
+okutwala	twala	take
+okuleeta	leeta	bring
+okuleka	leka	leave/stop
+okutandika	tandika	start
+okumaliriza	maliriza	finish
+okulonda	londa	choose
+okunoonya	noonya	search
+okufuna	funa	get
+okutegeera	tegeera	understand
+okumanya	manya	know
+okulowooza	lowooza	think
+okwogera	yogera	speak
+okuwulira	wulira	hear
+okutunuulira	tunuulira	look at
+okulindirira	lindirira	wait
+okukiriza	kiriza	accept/believe
+okukkiriza	kiriza	agree
+okwebaka	baka	sleep
+okugolokoka	golokoka	wake up
+okutambula	tambula	walk
+okudduka	dduka	run
+okuzannya	zannya	play
+okuyimba	yimba	sing
+okukuba	kuba	play instrument/hit
+okufumba	fumba	cook
+okulima	lima	farm
+okukola	kola	work
+okutunda	tunda	sell
+okugula	gula	buy
+okutunda	tunda	sell
+okusasula	sasula	pay
+okuweebwa	weebwa	be given
+okugaba	gaba	give
+okutwala	twala	carry
+
+
+# ============================================================
+# PRESENT TENSE
+# ============================================================
+
+nkola	kola	I work
+okola	kola	you work
+akola	kola	he/she works
+tukola	kola	we work
+mukola	kola	you plural work
+bakola	kola	they work
+
+nagenda	genda	I go
+ogenda	genda	you go
+agenda	genda	he/she goes
+tugenda	genda	we go
+mugenda	genda	you plural go
+bagenda	genda	they go
+
+nsoma	soma	I read
+osoma	soma	you read
+asoma	soma	he/she reads
+tusoma	soma	we read
+musoma	soma	you plural read
+basoma	soma	they read
+
+
+# ============================================================
+# MORE PRESENT FORMS
+# ============================================================
+
+nnywa	nywa	I drink
+onywa	nywa	you drink
+anywa	nywa	he/she drinks
+tunywa	nywa	we drink
+munywa	nywa	you plural drink
+banywa	nywa	they drink
+
+ndaba	laba	I see
+olaba	laba	you see
+alaba	laba	he/she sees
+tulaba	laba	we see
+mulaba	laba	you plural see
+balaba	laba	they see
+
+nkwata	kwata	I hold
+okwata	kwata	you hold
+akwata	kwata	he holds
+tukwata	kwata	we hold
+mukwata	kwata	you plural hold
+bakwata	kwata	they hold
+
+
+# ============================================================
+# NEGATIVE PRESENT
+# ============================================================
+
+sikola	kola	I do not work
+sigenda	genda	I do not go
+sigula	gula	I do not buy
+sisoma	soma	I do not read
+simanyi	manya	I do not know
+siwulira	wulira	I do not hear
+
+tokola	kola	you do not work
+togenda	genda	you do not go
+tosoma	soma	you do not read
+
+tekola	kola	he/she does not work
+tagenda	genda	he/she does not go
+tasoma	soma	he/she does not read
+
+tebakola	kola	they do not work
+tebagenda	genda	they do not go
+
+
+# ============================================================
+# FUTURE (NAA)
+# ============================================================
+
+nnaagenda	genda	I will go
+onaagenda	genda	you will go
+anaagenda	genda	he/she will go
+tunaagenda	genda	we will go
+munaagenda	genda	you plural will go
+banaagenda	genda	they will go
+
+nnaasoma	soma	I will read
+onaasoma	soma	you will read
+anaasoma	soma	he/she will read
+
+nnaayiga	yiga	I will learn
+anaayamba	yamba	he/she will help
+
+
+# ============================================================
+# PAST TENSE
+# ============================================================
+
+nagula	gula	I bought
+wagula	gula	you bought
+yagula	gula	he/she bought
+twagula	gula	we bought
+mwagula	gula	you plural bought
+baagula	gula	they bought
+
+nayiga	yiga	I learnt
+wayiga	yiga	you learnt
+yayiga	yiga	he learnt
+
+nagenda	genda	I went
+wagenda	genda	you went
+yagenda	genda	he went
+twagenda	genda	we went
+baagenda	genda	they went
+
+
+# ============================================================
+# PERFECTIVE FORMS
+# ============================================================
+
+koze	kola	did/worked
+genze	genda	went
+jje	jja	came
+dde	dda	returned
+gudde	gula	bought
+yise	yita	passed
+somye	soma	read
+wandiise	wandiika	wrote
+yambye	yamba	helped
+kubyeko	kuba	hit
+kwatidde	kwata	held
+tegedde	tegeera	understood
+manyidde	manya	known
+
+
+# ============================================================
+# APPLICATIVE (-ER/-IR)
+# ============================================================
+
+akolera	kolera	works for
+akomye	komya	stop for
+asomera	somera	reads for
+ayigiriza	yigiriza	teaches
+ayambako	yambako	helps with
+agulirako	gulira	buys for
+aleeterako	leetera	brings for
+
+
+# ============================================================
+# CAUSATIVE (-IS/-ES)
+# ============================================================
+
+asomesa	somesa	teaches
+ayigiriza	yigirizza	causes learning
+alabisa	labisa	shows
+atendeka	tendeka	trains
+akomyako	komyako	causes stopping
+afumbisa	fumbisa	causes cooking
+
+
+# ============================================================
+# PASSIVE (-IBW)
+# ============================================================
+
+akolwa	kolwa	is done
+akolibwa	kolibwa	is being done
+agulibwa	gulibwa	is bought
+atwalibwa	twalibwa	is taken
+aleetebwa	leetebwa	is brought
+ayambibwa	yambibwa	is helped
+asomebwa	somebwa	is taught
+awandiikibwa	wandiikibwa	is written
+
+
+# ============================================================
+# STATIVE (-IK)
+# ============================================================
+
+alabika	labika	is visible
+tegeerekeka	tegeerekeka	is understandable
+kimanyika	manyika	is known
+kirabika	labika	appears
+kikwatika	kwatika	is touchable
+
+
+# ============================================================
+# RECIPROCAL (-AN)
+# ============================================================
+
+tulabagana	labagana	we see each other
+tuyambagana	yambagana	we help each other
+tulwanagana	lwanagana	we fight each other
+twagalana	agalana	we love each other
+tusanyusagana	sanyusagana	we make each other happy
+tusisinkana	sisinkana	we meet each other
+
+
+# ============================================================
+# OBJECT INFIXES
+# ============================================================
+
+nkigula	gula	I buy it
+nkikola	kola	I do it
+nkisoma	soma	I read it
+nkigenda	genda	I take it
+bakigula	gula	they buy it
+bakikola	kola	they do it
+
+nkunonya	noonya	I search for you
+nkuyamba	yamba	I help you
+nkulaba	laba	I see you
+
+
+# ============================================================
+# COMBINED AFFIXES
+# ============================================================
+
+twakikola	kola	we did it
+baakikola	kola	they did it
+tunaakikola	kola	we will do it
+banaakikola	kola	they will do it
+
+twagulira	gulira	we bought for
+baatwalibwa	twalibwa	they were taken
+tunaayamba	yamba	we will help
+
+
+# ============================================================
+# IRREGULAR VERBS
+# ============================================================
+
+lya	lya	eat
+lidde	lya	ate
+
+jja	jja	come
+zze	jja	came
+
+va	va	come from
+vudde	va	came from
+
+beera	beera	be
+badde	beera	was
+
+manya	manya	know
+manyi	manya	known
+
+
+# ============================================================
+# FALSE POSITIVES
+# ============================================================
+
+okukulu	okukulu	adjective big
+okusanyu	okusanyu	noun happiness
+okubiri	okubiri	second ordinal
+okubiri	okubiri	number two
+okuba	okuba	noun possibility
+okutu	okutu	ear noun
+okukula	okukula	growth noun
+okulya	lya	food context possible noun

@@ -1,4 +1,0 @@
-{
-  "_comment": "variant -> canonical spelling mappings, keyed case-insensitively (see spelling.py). Populate as the team confirms real variants; an empty table is a safe no-op.",
-  "mappings": {}
-}
