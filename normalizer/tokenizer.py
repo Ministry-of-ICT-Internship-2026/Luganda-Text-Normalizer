@@ -43,12 +43,29 @@ Fix: protect known abbreviations (word + trailing period, as one unit)
 the same way elision words are protected — mask them before NLTK ever
 sees the text, so there's no lone trailing period left to misread.
 
+A THIRD breakage (found via test_tokenizer_extreme.py cases 16-17) is
+independent of Luganda linguistics entirely: it's a namespace collision
+in the masking mechanism itself. If the raw input text happens to
+already contain something shaped like our internal placeholder tag
+(e.g. a product code or ticket ID like "XLGWRDX0"), the restore step
+could previously either crash with KeyError (if that exact index was
+never generated) or, worse, silently substitute in an unrelated word
+(if the index DID coincide with a real placeholder). Fixed by making
+the placeholder tag a per-call random token that is verified absent
+from the source text before use, rather than a fixed constant — see
+Rule 8 below.
+
 Everything else (agglutination, geminate consonants like "ssomero", long
 vowels like "eddiini") is fine for NLTK at the word level, since those
 aren't punctuation.
 """
 
+from __future__ import annotations
+
 import re
+import secrets
+from typing import Dict, List, Match, Optional
+
 import nltk
 
 try:
@@ -90,28 +107,58 @@ _ABBREV_RE = r"\b(?:" + "|".join(re.escape(a) for a in _ABBREVIATIONS) + r")\."
 # otherwise grab just "Dr" and leave a lone trailing period behind.
 _PROTECTED_RE = re.compile(rf"{_ABBREV_RE}|{_LUGANDA_WORD_RE}")
 
-# Placeholder tag used to shield matched words from NLTK. Deliberately
+# Base placeholder tag used to shield matched words from NLTK. Deliberately
 # alphanumeric-only so Treebank's tokenizer has nothing in it to split on.
-_PLACEHOLDER_TAG = "XLGWRDX"
-
-# Rule 6 — substring restore, not exact-match restore.
-# NLTK can still glue stray punctuation directly onto a placeholder
-# (e.g. a leading quote before a protected word: "'XLGWRDX0" instead of
-# splitting into "'" + "XLGWRDX0"). An exact dict lookup on the whole
-# token would then miss it and leak the raw placeholder into the output.
-# Substituting the placeholder pattern WITHIN each token, rather than
-# requiring the token to equal the placeholder exactly, closes that gap.
-_PLACEHOLDER_FIND_RE = re.compile(rf"{_PLACEHOLDER_TAG}\d+")
+# This is only a STARTING POINT now — see Rule 8. The actual tag used for
+# any given call to tokenize() is derived from this base plus a random
+# per-call suffix, so a fixed constant is never sent through NLTK.
+_PLACEHOLDER_BASE_TAG = "XLGWRDX"
 
 
-def tokenize(text, lowercase=False, normalize_apostrophe=True):
+def _make_session_tag(text: str) -> str:
     """
-    Tokenize Luganda text, correcting NLTK's handling of:
-      - the curly apostrophe (’) in elision/ng' words, and
-      - known abbreviations (e.g. "Dr.") wrongly split from their period.
+    Rule 8 — collision-proof placeholder tag.
+
+    A fixed placeholder tag (just "XLGWRDX" + a sequential integer) means
+    any input text that happens to already contain that exact shape — a
+    product code, a ticket ID, or literally the string "XLGWRDX0" — could
+    either crash the restore step with KeyError (if that index was never
+    actually generated this call) or, worse, silently get swapped for an
+    unrelated word if the index DID coincide with a real placeholder.
+
+    This generates a random per-call suffix and verifies it does not
+    already appear anywhere in the source text before using it, retrying
+    with a new random suffix on the rare chance of a collision. This
+    makes an accidental (or adversarial) collision impossible for a given
+    call, rather than merely "unlikely."
 
     Args:
-        text: raw Luganda string.
+        text: the raw input text this tokenize() call is processing.
+
+    Returns:
+        A placeholder tag prefix, guaranteed not to appear anywhere in
+        `text`, safe to combine with a numeric suffix per placeholder.
+    """
+    tag = _PLACEHOLDER_BASE_TAG
+    while tag in text:
+        tag = f"{_PLACEHOLDER_BASE_TAG}{secrets.token_hex(4)}"
+    return tag
+
+
+def tokenize(
+    text: Optional[str],
+    lowercase: bool = False,
+    normalize_apostrophe: bool = True,
+) -> List[str]:
+    """
+    Tokenize Luganda text, correcting NLTK's handling of:
+      - the curly apostrophe (’) in elision/ng' words,
+      - known abbreviations (e.g. "Dr.") wrongly split from their period, and
+      - placeholder/text namespace collisions (see Rule 8 above).
+
+    Args:
+        text: raw Luganda string. None or an empty/whitespace-only string
+            returns an empty list rather than raising.
         lowercase: if True, lowercase tokens after tokenizing (off by
             default — Luganda capitalization carries information, e.g.
             sentence-initial "Ng'" vs mid-sentence "ng'").
@@ -127,11 +174,14 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
     if not text or not text.strip():
         return []
 
-    placeholders = {}
+    session_tag = _make_session_tag(text)
+    placeholder_find_re = re.compile(rf"{re.escape(session_tag)}\d+")
 
-    def _stash(match):
+    placeholders: Dict[str, str] = {}
+
+    def _stash(match: "Match[str]") -> str:
         idx = len(placeholders)
-        key = f"{_PLACEHOLDER_TAG}{idx}"
+        key = f"{session_tag}{idx}"
         word = match.group(0)
         if normalize_apostrophe:
             # Rule 2 — apostrophe canonicalization: curly ’ -> straight '
@@ -153,8 +203,8 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
     # Uses substring replacement (Rule 6) rather than exact-match, so a
     # placeholder that NLTK left glued to stray punctuation still resolves
     # correctly instead of leaking the raw placeholder string.
-    def _restore(tok):
-        return _PLACEHOLDER_FIND_RE.sub(
+    def _restore(tok: str) -> str:
+        return placeholder_find_re.sub(
             lambda m: placeholders[m.group(0)], tok
         )
 
@@ -166,11 +216,21 @@ def tokenize(text, lowercase=False, normalize_apostrophe=True):
     return tokens
 
 
-def diagnose(sentence):
+def diagnose(sentence: str) -> Dict[str, object]:
     """
     Compare plain nltk.word_tokenize against tokenize() for one sentence.
     Useful for demonstrating/documenting exactly where and how the default
-    tokenizer breaks. Returns a dict with both outputs side by side.
+    tokenizer breaks.
+
+    Args:
+        sentence: a single sentence (or short text) to run through both
+            the stock NLTK tokenizer and this module's tokenize().
+
+    Returns:
+        A dict with three keys:
+            "sentence": the original input, unchanged.
+            "nltk_default": list[str], output of plain nltk.word_tokenize.
+            "custom_tokenize": list[str], output of this module's tokenize().
     """
     return {
         "sentence": sentence,
