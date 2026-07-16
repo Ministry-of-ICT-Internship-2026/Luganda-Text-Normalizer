@@ -20,4 +20,20 @@ CLOSED_CLASS = {
     'bonna',    # all
     'bombi',    # both
     'buli',     # every
+
+    # --- Numeral vocabulary (see numbers.py) -------------------------
+    # Every atomic word numbers.number_to_words() can produce. Without
+    # these, the noun/verb strippers mistake numeral morphology for
+    # noun-class prefixes -- e.g. "mukaaga" (six) looks exactly like
+    # MU-BA-class "mu" + root "kaaga", and would otherwise get wrongly
+    # stripped to "kaaga". Compound-number connector words ("mu", "na")
+    # are included too, even though the strippers already fall back
+    # safely on those via their own "root too short" guards, so the
+    # protection is explicit rather than incidental.
+    'zeero', 'emu', 'bbiri', 'ssatu', 'nnya', 'ttaano',
+    'mukaaga', 'musanvu', 'munaana', 'mwenda',
+    'kkumi', 'amakumi', 'abiri', 'asatu', 'ana', 'ataano',
+    'nkaaga', 'nsanvu', 'kinaana', 'kyenda',
+    'kikumi', 'bikumi', 'lukumi', 'enkumi',
+    'mu', 'na',
 }
