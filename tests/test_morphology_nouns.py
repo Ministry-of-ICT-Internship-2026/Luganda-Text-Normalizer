@@ -20,16 +20,16 @@ project_root = os.path.dirname(current_dir)  # one level up from tests/
 # ---------- Step 2: Add the 'normalizer' folder to sys.path ----------
 normalizer_dir = os.path.join(project_root, 'normalizer')
 if not os.path.exists(normalizer_dir):
-    print(f"❌ Folder 'normalizer' not found at {normalizer_dir}")
+    print(f" Folder 'normalizer' not found at {normalizer_dir}")
     sys.exit(1)
 sys.path.insert(0, normalizer_dir)   # Now Python can see files inside normalizer/
 
 # ---------- Step 3: Import the NounStripper ----------
 try:
     from morphology_nouns import NounStripper
-    print("✅ Imported from morphology_nouns")
+    print(" Imported from morphology_nouns")
 except ImportError as e:
-    print(f"❌ Could not import NounStripper. Error: {e}")
+    print(f" Could not import NounStripper. Error: {e}")
     print(f"   Looking for: {os.path.join(normalizer_dir, 'morphology_nouns.py')}")
     sys.exit(1)
 

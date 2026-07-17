@@ -1,7 +1,7 @@
 # test_code_switching.py
 """Tests for normalizer/code_switching.py."""
 
-from normalizer.codeswitching import (
+from normalizer.code_switching import (
     tag_token,
     tag_tokens,
     has_code_switching,

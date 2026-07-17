@@ -1,146 +1,133 @@
 # Luganda Text Normalizer
 
-A modular Python library for preprocessing Luganda text for search,
-embeddings, spell-checking, machine learning, and other NLP tasks.
+A Python library for preprocessing Luganda text for NLP pipelines:
+cleaning, elision expansion, abbreviation/acronym expansion, currency
+normalization, date/time expansion, number-to-words expansion,
+tokenization, dictionary-based spelling standardization, noun/verb
+morphology stripping, and English–Luganda code-switching detection.
 
-It handles the things generic (English-first) NLP tooling gets wrong for
-Luganda: apostrophe-based elisions (`n'`, `ky'`), noun-class prefixes,
-verb affixes, and everyday English/Luganda code-switching.
+> Status: actively developed. See [`docs/architecture.md`](docs/architecture.md)
+> for the full design rationale, module inventory, and known limitations.
 
-## Installation
+## Install
+
+From the project root, editable install (recommended for development):
 
 ```bash
 pip install -e .
+# with dev/test dependencies:
+pip install -e ".[dev]"
 ```
 
-This installs the importable package `normalizer` (the PyPI/distribution
-name is `luganda-normalizer`, but you always `import normalizer`).
+Requires Python ≥ 3.9. Depends on `nltk>=3.8` (see `requirements.txt`).
 
-## Quick Start
+## Quick start
 
 ```python
-import normalizer as n
+import normalizer
 
-text = "Abaana b'omu kibuga bazannya n'essanyu."
-
-# Full pipeline
-print(n.normalize(text))
-
-# Tokenization only
-print(n.tokenize("n'ekitabo ky'omusomesa"))
+normalizer.normalize("Nasasula UGX 50,000 nga 16/07/2026 essaawa 07:00.")
 ```
 
-## What the pipeline does
-
-`normalize()` applies the following stages, in order:
-
-1.  **Cleaning** — Unicode normalization, punctuation and whitespace cleanup
-2.  **Diacritic canonicalization** — including apostrophe-variant handling
-3.  **Elision expansion** — `n'` → `na`
-4.  **Abbreviation / acronym expansion** — `URA` → `Uganda Revenue Authority`
-    (case-sensitive, so it runs *before* lowercasing)
-5.  **Currency expansion** — `UGX 20,000` → words
-6.  **Date / time expansion** — `12/05/2026` → words
-7.  **Number expansion** — remaining cardinal numbers → words
-    (phone numbers are protected and left untouched)
-8.  **Tokenization** — apostrophe-aware
-9.  **Lowercasing**
-10. **Spelling standardization** — dictionary-based variant correction
-11. **Noun-class prefix stripping**
-12. **Verb affix stripping**
-
-Stages 4–7 are each individually toggleable (default on) via keyword
-arguments on `normalize()`, for callers whose text shouldn't have one of
-them applied (e.g. a corpus of raw phone-number logs).
-
-## Example
+Or use individual stages directly, without the full pipeline:
 
 ```python
->>> n.normalize("Nagenda ku 12/05/2026 ne nsasula UGX 20,000.")
-"genda ku kkumi na bbiri omwezi ogwokutaano enkumi bbiri mu abiri mu mukaaga ne sasula Uganda shilingi emitwalo ebiri"
+from normalizer import number_to_words, expand_currency_to_words, expand_abbreviations
+
+number_to_words(45)                      # -> "amakumi ana mu ttaano"
+expand_currency_to_words("Ekiguzibwa $10 nedda.")
+                                          # -> "Ekiguzibwa ddoola kkumi nedda."
+expand_abbreviations("URA basoma tax.")  # -> "Uganda Revenue Authority basoma tax."
 ```
 
-## Individual components
+## What it does
 
-Every stage is also usable on its own, so you can assemble a custom
-pipeline or unit-test a single step:
+The pipeline covers ten preprocessing capabilities, each implemented
+in its own module so you can use just the pieces you need:
+
+| # | Capability | Module | Example |
+|---|---|---|---|
+| 1 | Unicode normalization | `cleaner` | NFC-normalizes text, fixes stray control characters |
+| 2 | Lowercasing | `pipeline` | applied after tokenization, before spelling lookup |
+| 3 | Punctuation cleanup | `cleaner` | standardizes quotes/dashes, collapses repeated punctuation |
+| 4 | Number expansion | `number_words` | `25` → `amakumi abiri mu ttaano` |
+| 5 | Date/time expansion | `datetime_expand` | `16/07/2026` → `Lwakutaano, olunaku 16 mu mwezi gwa Julaayi, mu mwaka 2026` |
+| 6 | Currency normalization | `currency` | `50,000/=` → `UGX 50,000`, or fully spelled out |
+| 7 | Abbreviation expansion | `abbreviations` | `URA` → `Uganda Revenue Authority`, `Dr` → `Dokita` |
+| 8 | Spelling correction | `spelling` | dictionary-based variant → canonical spelling |
+| 9 | Morphological normalization | `morphology_nouns`, `morphology_verbs` | strips noun-class and verb affixes to a root |
+| 10 | Code-switching handling | `edge_cases`, `code_switching` | preserves embedded English rather than mangling it, and can tag/detect it on request |
+
+See [`docs/architecture.md`](docs/architecture.md) for the full
+pipeline order, the reasoning behind that order, and every module's
+documented assumptions and limitations.
+
+## Full pipeline
 
 ```python
-from normalizer import (
-    clean_text,               # cleaner.py
-    normalize_diacritics,     # diacritics.py
-    expand_elisions,          # contractions.py
-    expand_abbreviations,     # abbreviations.py
-    expand_currency_to_words, # currency.py
-    expand_datetimes,         # datetime.py
-    expand_numbers,           # numbers.py
-    tokenize,                 # tokenizer.py
-    standardize_spelling,     # spelling.py
-    NounStripper,             # morphology_nouns.py
-    VerbStripper,             # morphology_verbs.py
-    tag_tokens,                # codeswitching.py
-    has_code_switching,        # codeswitching.py
-    handle_social_edge_cases,  # edge_cases.py
+normalizer.normalize(
+    text,
+    expand_abbrevs=True,       # URA -> Uganda Revenue Authority, Dr -> Dokita, etc.
+    expand_currency=True,      # UGX 50,000 / $10 / 50,000/= -> spelled-out amounts
+    expand_dates_times=True,   # 16/07/2026, 07:00 -> Luganda date/time words
+    expand_nums=True,          # plain cardinal numbers -> Luganda words
 )
 ```
 
-See each module's docstring, or `docs/architecture.md`, for the full
-list of exported functions per stage.
+Each expansion stage can be turned off independently if it's not right
+for your input (e.g. a corpus of raw phone-number logs).
 
-### Code-switching detection
+`code_switching`'s tagging/annotation functions are **not** part of
+the default `normalize()` output — they're an analysis tool you call
+directly (`tag_tokens`, `has_code_switching`, `annotate_code_switching`)
+when you want to inspect where English and Luganda mix, rather than a
+step that rewrites your text.
 
-Luganda social/news text frequently mixes in English words
-("stress", "network", "boss"). This isn't an error to fix — the
-normalizer preserves it and can optionally tag or annotate it:
-
-```python
-from normalizer import tag_tokens, has_code_switching, annotate_code_switching
-
-tokens = ["omusajja", "abadde", "ne", "stress", "nnyo"]
-tag_tokens(tokens)          # per-token LUG / ENG / NUM / PUNCT / UNK tags
-has_code_switching(tokens)  # True — has both a LUG and an ENG token
-annotate_code_switching("omusajja abadde ne stress nnyo.")
-# -> "omusajja abadde ne [ENG]stress[/ENG] nnyo."
-```
-
-## Project structure
-
-```
-normalizer/
-├── __init__.py                  # public API surface
-├── pipeline.py                  # normalize() — orchestrates every stage
-├── cleaner.py                   # Unicode / punctuation / whitespace cleanup
-├── diacritics.py                # diacritic & apostrophe-variant canonicalization
-├── contractions.py              # elision expansion (n' -> na)
-├── abbreviations.py             # acronym / honorific / cross-language expansion
-├── currency.py                  # currency detection & verbalization
-├── datetime.py                  # date / time expansion
-├── numbers.py                   # number-to-words expansion
-├── tokenizer.py                 # apostrophe-aware tokenization
-├── spelling.py                  # dictionary-based spelling standardization
-├── morphology_nouns.py          # noun-class prefix stripping
-├── morphology_verbs.py          # verb affix stripping
-├── codeswitching.py             # English/Luganda code-switching detection
-├── edge_cases.py                # social-text edge cases (emoji, hashtags, phone numbers)
-├── stopwords.py                 # closed-class particle list
-├── spelling_dictionary.json     # variant -> canonical spelling mappings
-├── abbreviations_dictionary.json# acronym / title / cross-language expansions
-└── lexicon_data/                # packaged copies of data/nouns.txt & verbs.txt
-    ├── nouns.txt                #   (used by codeswitching.py's LUG lexicon)
-    └── verbs.txt
-
-data/                            # canonical source corpora & word lists
-docs/architecture.md             # design notes and processing-flow diagram
-tests/                           # pytest suite, one file per module
-```
-
-## Testing
+## Running the tests
 
 ```bash
 pip install -e ".[dev]"
-pytest
+pytest tests/ -v
 ```
+
+As of this writing: **197 passing tests** across cleaning, diacritics,
+edge cases, abbreviations, currency, date/time, numbers, tokenization,
+spelling, morphology, code-switching, and the end-to-end pipeline.
+
+(Two files, `tests/test_morphology_nouns.py` and
+`tests/test_morphology_verbs.py`, are standalone scripts rather than
+pytest modules — run them directly with `python tests/test_morphology_nouns.py`.
+Neither passes its full internal expectation table (pre-existing
+class-disambiguation ambiguities, plus one intentional table entry now
+stale after this update's numeral fix) — see
+[`docs/architecture.md`](docs/architecture.md#2-module-status) for the
+full explanation.)
+
+## Known limitations
+
+Every module documents its own assumptions and limitations inline
+(read the module docstrings), but the headline ones:
+
+- **Numbers**: no confirmed Luganda word for magnitudes ≥ 1,000,000 —
+  `number_words.number_to_words` raises `NumberTooLargeError` rather than
+  guess one.
+- **Dates/times**: the morning/afternoon/evening/night qualifier
+  wording and boundaries are a best-effort default, not a
+  native-speaker-confirmed standard.
+- **Currency**: only UGX and USD are covered.
+- **Dictionaries** (`spelling_dictionary.json`,
+  `abbreviations_dictionary.json`) are intentionally small, vetted
+  seed sets — extend them with confirmed entries only, not guesses.
+- **Code-switching**'s English word list is a small curated set
+  (~120 words), not a general-purpose language identifier.
+
+Full detail, plus the reasoning behind the pipeline's stage ordering,
+is in [`docs/architecture.md`](docs/architecture.md).
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
-MIT License
+MIT — see [`LICENSE`](LICENSE).

@@ -57,7 +57,7 @@ Date / time expansion (normalizer.datetime_expand):
     weekday_name, month_name, date_to_words, time_to_words,
     expand_dates, expand_times, expand_datetimes
 
-Number-to-words expansion (normalizer.numbers):
+Number-to-words expansion (normalizer.number_words):
     number_to_words, expand_numbers, NumberTooLargeError
 
 Tokenization (normalizer.tokenizer):
@@ -139,7 +139,7 @@ from normalizer.currency import (
 )
 
 # --- Date / time expansion ----------------------------------------------------
-from normalizer.datetime import (
+from normalizer.datetime_expand import (
     weekday_name,
     month_name,
     date_to_words,
@@ -150,7 +150,7 @@ from normalizer.datetime import (
 )
 
 # --- Number-to-words expansion -------------------------------------------------
-from normalizer.numbers import number_to_words, expand_numbers, NumberTooLargeError
+from normalizer.number_words import number_to_words, expand_numbers, NumberTooLargeError
 
 # --- Tokenization -----------------------------------------------------------
 from normalizer.tokenizer import tokenize, diagnose
@@ -163,7 +163,7 @@ from normalizer.morphology_nouns import NounStripper
 from normalizer.morphology_verbs import VerbStripper
 
 # --- Code-switching detection -------------------------------------------------
-from normalizer.codeswitching import (
+from normalizer.code_switching import (
     tag_token,
     tag_tokens,
     has_code_switching,
@@ -235,4 +235,4 @@ __all__ = [
     "CLOSED_CLASS",
 ]
 
-__version__ = "1.0.0"
+__version__ = "0.1.0"

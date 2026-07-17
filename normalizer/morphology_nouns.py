@@ -7,7 +7,14 @@ from typing import Tuple, Optional
 
 from normalizer.stopwords import CLOSED_CLASS
 
-logging.basicConfig(level=logging.INFO)
+# Library code must never call logging.basicConfig() -- that reconfigures
+# the *root* logger for every application that imports this package,
+# potentially clobbering (or fighting with) the host app's own logging
+# setup. A NullHandler is the standard library-author pattern: it silences
+# "No handlers could be found for logger X" warnings while leaving all
+# configuration (handlers, levels, formatting) entirely up to whoever is
+# actually running the program.
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 LOGGER = logging.getLogger(__name__)
 
 

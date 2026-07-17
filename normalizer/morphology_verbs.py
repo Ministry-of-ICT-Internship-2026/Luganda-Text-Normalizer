@@ -9,7 +9,10 @@ from typing import Tuple, List
 
 from normalizer.stopwords import CLOSED_CLASS
 
-logging.basicConfig(level=logging.INFO)
+# See morphology_nouns.py for why this is a NullHandler and not
+# logging.basicConfig(): library code must never reconfigure the root
+# logger for its caller's application.
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 LOGGER = logging.getLogger(__name__)
 
 

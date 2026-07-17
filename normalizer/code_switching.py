@@ -48,7 +48,7 @@ import os
 import re
 from functools import lru_cache
 
-from .stopwords import CLOSED_CLASS
+from normalizer.stopwords import CLOSED_CLASS
 
 _DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lexicon_data")
 
