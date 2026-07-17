@@ -7,7 +7,7 @@ Implements the Bucket A (mechanical) rules identified in the P1 research log
 news, Twitter/X, and the Luganda Revised Bible.
 
 This module deliberately does NOT touch anything from Bucket B (diacritic /
-spelling variants like the ŋ vs. ng' finding) — those require native-speaker
+spelling variants like the ŋ vs. ng finding) — those require native-speaker
 sign-off and belong in normalize_diacritics(), a separate function built
 after that review happens.
 
