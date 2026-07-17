@@ -1,0 +1,265 @@
+# ============================================================
+# MU-BA Class (People)
+# ============================================================
+omuntu	MU-BA	omu	ntu
+abantu	MU-BA	aba	ntu
+omusajja	MU-BA	omu	sajja
+abasajja	MU-BA	aba	sajja
+omukazi	MU-BA	omu	kazi
+abakazi	MU-BA	aba	kazi
+omulenzi	MU-BA	omu	lenzi
+abalenzi	MU-BA	aba	lenzi
+omuwala	MU-BA	omu	wala
+abawala	MU-BA	aba	wala
+omwana	MU-BA	omu	wana
+abaana	MU-BA	aba	ana
+omuzadde	MU-BA	omu	zadde
+abazadde	MU-BA	aba	zadde
+omusomesa	MU-BA	omu	somesa
+abasomesa	MU-BA	aba	somesa
+omuyizi	MU-BA	omu	yizi
+abayizi	MU-BA	aba	yizi
+omulimi	MU-BA	omu	limi
+abalimi	MU-BA	aba	limi
+omulunzi	MU-BA	omu	lunzi
+abalunzi	MU-BA	aba	lunzi
+omusawo	MU-BA	omu	sawo
+abasawo	MU-BA	aba	sawo
+omujjanjabi	MU-BA	omu	jjanjabi
+abajjanjabi	MU-BA	aba	jjanjabi
+omusirikale	MU-BA	omu	sirikale
+abasirikale	MU-BA	aba	sirikale
+omusuuubuzi	MU-BA	omu	suubuzi
+abasuubuzi	MU-BA	aba	suubuzi
+omutunzi	MU-BA	omu	tunzi
+abatunzi	MU-BA	aba	tunzi
+omufuzi	MU-BA	omu	fuzi
+abafuzi	MU-BA	aba	fuzi
+omwami	MU-BA	omu	wami
+abami	MU-BA	aba	wami
+omukama	MU-BA	omu	kama
+abakama	MU-BA	aba	kama
+omugenyi	MU-BA	omu	genyi
+abagenyi	MU-BA	aba	genyi
+omukozi	MU-BA	omu	kozi
+abakozi	MU-BA	aba	kozi
+omuvuzi	MU-BA	omu	vuzi
+abavuzi	MU-BA	aba	vuzi
+omutabani	MU-BA	omu	tabani
+abatabani	MU-BA	aba	tabani
+omukyala	MU-BA	omu	kyala
+abakyala	MU-BA	aba	kyala
+omulwadde	MU-BA	omu	lwadde
+abalwadde	MU-BA	aba	lwadde
+
+# ============================================================
+# MU-MI Class (Trees, Plants, Objects)
+# ============================================================
+omuti	MU-MI	omu	ti
+emiti	MU-MI	emi	ti
+omugaati	MU-MI	omu	gaati
+emigaati	MU-MI	emi	gaati
+omuceere	MU-MI	omu	ceere
+emiceere	MU-MI	emi	ceere
+omunnyu	MU-MI	omu	nnyu
+eminnyu	MU-MI	emi	nnyu
+omwenge	MU-MI	omu	wenge
+emwenge	MU-MI	emi	wenge
+omugga	MU-MI	omu	gga
+emigga	MU-MI	emi	gga
+omulimu	MU-MI	omu	limu
+emirimu	MU-MI	emi	limu
+omukono	MU-MI	omu	kono
+emikono	MU-MI	emi	kono
+omwaka	MU-MI	omu	waka
+emyaka	MU-MI	emi	waka
+omwezi	MU-MI	omu	wezi
+emyezi	MU-MI	emi	wezi
+omupiira	MU-MI	omu	piira
+emipiira	MU-MI	emi	piira
+omukka	MU-MI	omu	kka
+emikka	MU-MI	emi	kka
+omuliro	MU-MI	omu	liro
+emiliro	MU-MI	emi	liro
+omukwano	MU-MI	omu	kwano
+emikwano	MU-MI	emi	kwano
+omuwendo	MU-MI	omu	wendo
+emiwendo	MU-MI	emi	wendo
+omugugu	MU-MI	omu	gugu
+emigugu	MU-MI	emi	gugu
+
+# ============================================================
+# LI-MA Class (Liquids, Augmentatives, Collectives)
+# ============================================================
+erinnya	LI-MA	eri	nnya
+amannya	LI-MA	ama	nnya
+eggwanga	LI-MA	eri	gwanga
+amawanga	LI-MA	ama	wanga
+eriiso	LI-MA	eri	iiso
+amaaso	LI-MA	ama	aaso
+ekkubo	LI-MA	eri	kkubo
+amakubo	LI-MA	ama	kubo
+ekkomera	LI-MA	eri	kkomera
+amakomera	LI-MA	ama	komera
+eggali	LI-MA	eri	ggali
+amagali	LI-MA	ama	gali
+eddwaliro	LI-MA	eri	ddwaliro
+amadwaliro	LI-MA	ama	dwaliro
+eddakiika	LI-MA	eri	ddakiika
+amaddakiika	LI-MA	ama	ddakiika
+ebbanga	LI-MA	eri	bbanga
+amabbanga	LI-MA	ama	bbanga
+ebbaluuwa	LI-MA	eri	bbaluuwa
+amabbaluuwa	LI-MA	ama	bbaluuwa
+amazzi	LI-MA	ama	zzi
+amata	LI-MA	ama	ta
+amagi	LI-MA	ama	gi
+amatooke	LI-MA	ama	tooke
+amakya	LI-MA	ama	kya
+amalalo	LI-MA	ama	lalo
+amaterekero	LI-MA	ama	terekero
+
+# ============================================================
+# KI-BI Class (Artifacts, Objects)
+# ============================================================
+ekitabo	KI-BI	eki	tabo
+ebitabo	KI-BI	ebi	tabo
+ekibuga	KI-BI	eki	buga
+ebibuga	KI-BI	ebi	buga
+ekibiina	KI-BI	eki	biina
+ebibiina	KI-BI	ebi	biina
+ekyalo	KI-BI	eki	yalo
+ebyalo	KI-BI	ebi	yalo
+ekibala	KI-BI	eki	bala
+ebibala	KI-BI	ebi	bala
+ekifaananyi	KI-BI	eki	faananyi
+ebifaananyi	KI-BI	ebi	faananyi
+ekifo	KI-BI	eki	fo
+ebifo	KI-BI	ebi	fo
+ekisenge	KI-BI	eki	senge
+ebisenge	KI-BI	ebi	senge
+ekitundu	KI-BI	eki	tundu
+ebitundu	KI-BI	ebi	tundu
+ekitongole	KI-BI	eki	tongole
+ebitongole	KI-BI	ebi	tongole
+ekizannyiro	KI-BI	eki	zannyiro
+ebizannyiro	KI-BI	ebi	zannyiro
+ekiteeteeyi	KI-BI	eki	teeteeyi
+ebiteeteeyi	KI-BI	ebi	teeteeyi
+ekikompe	KI-BI	eki	kompe
+ebikompe	KI-BI	ebi	kompe
+ekiso	KI-BI	eki	so
+ebiso	KI-BI	ebi	so
+ekyokuyiga	KI-BI	eki	yokuyiga
+ebyokuyiga	KI-BI	ebi	yokuyiga
+ekintu	KI-BI	eki	ntu
+ebintu	KI-BI	ebi	ntu
+ekyama	KI-BI	eki	yama
+ebyama	KI-BI	ebi	yama
+ekirabo	KI-BI	eki	rabo
+ebirabo	KI-BI	ebi	rabo
+ekizibu	KI-BI	eki	zibu
+ebizibu	KI-BI	ebi	zibu
+ekigere	KI-BI	eki	gere
+ebigere	KI-BI	ebi	gere
+ekisolo	KI-BI	eki	solo
+ebisolo	KI-BI	ebi	solo
+
+# ============================================================
+# N Class (Animals, Loanwords)
+# ============================================================
+ente	N	en	te
+enkoko	N	en	koko
+ensimbi	N	en	simbi
+ennyama	N	en	nyama
+essaawa	N	en	saawa
+essomero	N	en	somero
+ennyonyi	N	en	nyonyi
+enkuba	N	en	kuba
+enjala	N	en	jala
+ensalo	N	en	salo
+ensuuka	N	en	suuka
+emboga	N	en	boga
+ennyaanya	N	en	nyaanya
+embuzi	N	en	buzi
+endiga	N	en	diga
+embwa	N	en	bwa
+emmotoka	N	en	mmotoka
+ebbaasi	N	en	bbaasi
+essanduuko	N	en	sanduuko
+essaati	N	en	saati
+engatto	N	en	gatto
+ekkalaamu	N	en	kkalaamu
+edduuka	N	en	dduuka
+ennoni	N	en	noni
+enva	N	en	va
+eviiri	N	en	viiri
+ewuuma	N	en	wuuma
+
+# ============================================================
+# LU-N Class (Long, Slim Objects)
+# ============================================================
+oluggi	LU-N	olu	ggi
+enggi	LU-N	en	ggi
+oluguudo	LU-N	olu	guudo
+enguudo	LU-N	en	guudo
+olubaawo	LU-N	olu	baawo
+embaawo	LU-N	en	baawo
+olupapula	LU-N	olu	papula
+empapula	LU-N	en	papula
+olunaku	LU-N	olu	naku
+ennaku	LU-N	en	naku
+olutindo	LU-N	olu	tindo
+entindo	LU-N	en	tindo
+olulimi	LU-N	olu	limi
+ennimi	LU-N	en	limi
+olugoye	LU-N	olu	goye
+engoye	LU-N	en	goye
+olubuto	LU-N	olu	buto
+embuto	LU-N	en	buto
+olukiiko	LU-N	olu	kiiko
+enkiiko	LU-N	en	kiiko
+olukumi	LU-N	olu	kumi
+enkumi	LU-N	en	kumi
+oluvannyuma	LU-N	olu	vannyuma
+envannyuma	LU-N	en	vannyuma
+
+# ============================================================
+# KA-BU Class (Diminutives, Collectives)
+# ============================================================
+akagaali	KA-BU	aka	gaali
+obugaali	KA-BU	obu	gaali
+akatale	KA-BU	aka	tale
+obutale	KA-BU	obu	tale
+akasozi	KA-BU	aka	sozi
+obusozi	KA-BU	obu	sozi
+akawungeezi	KA-BU	aka	wungeezi
+obuwungeezi	KA-BU	obu	wungeezi
+akabwa	KA-BU	aka	bwa
+obubwa	KA-BU	obu	bwa
+akaana	KA-BU	aka	ana
+obuana	KA-BU	obu	ana
+akakuta	KA-BU	aka	kuta
+obukuta	KA-BU	obu	kuta
+
+# ============================================================
+# BU Class (Abstract Qualities)
+# ============================================================
+obulimi	BU	obu	limi
+obuzimbi	BU	obu	zimbi
+obubazzi	BU	obu	bazzi
+obuliri	BU	obu	liri
+obugenzi	BU	obu	genzi
+obungi	BU	obu	ngi
+obuvanjuba	BU	obu	vanjuba
+obwanvu	BU	obu	wanvu
+obubi	BU	obu	bi
+
+# ============================================================
+# FALSE POSITIVES (Words NOT to Strip)
+# ============================================================
+kikumi	FALSE	-	kikumi
+kibuga	FALSE	-	kibuga
+musa	FALSE	-	musa
+muyaga	FALSE	-	muyaga
+mwenge	FALSE	-	mwenge

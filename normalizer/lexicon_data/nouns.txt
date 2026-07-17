@@ -1,0 +1,278 @@
+# ============================================================
+# MU-BA Class Extension (People)
+# ============================================================
+
+omusajja	MU-BA	omu	sajja
+abasajja	MU-BA	aba	sajja
+omuwandiisi	MU-BA	omu	wandiisi
+abawandiisi	MU-BA	aba	wandiisi
+omukungu	MU-BA	omu	kungu
+abakungu	MU-BA	aba	kungu
+omukulembeze	MU-BA	omu	kulembeze
+abakulembeze	MU-BA	aba	kulembeze
+omukungu	MU-BA	omu	kungu
+abakungu	MU-BA	aba	kungu
+omuddusi	MU-BA	omu	ddusi
+abaddusi	MU-BA	aba	ddusi
+omukubi	MU-BA	omu	kubi
+abakubi	MU-BA	aba	kubi
+omuyimbi	MU-BA	omu	yimbi
+abayimbi	MU-BA	aba	yimbi
+omuyizi	MU-BA	omu	yizi
+abayizi	MU-BA	aba	yizi
+omukozi	MU-BA	omu	kozi
+abakozi	MU-BA	aba	kozi
+omunyonnyozi	MU-BA	omu	nyonnyozi
+abanyonnyozi	MU-BA	aba	nyonnyozi
+omutendesi	MU-BA	omu	tendesi
+abatendesi	MU-BA	aba	tendesi
+omukuumi	MU-BA	omu	kuumi
+abakuumi	MU-BA	aba	kuumi
+omuvubuka	MU-BA	omu	vubuka
+abavubuka	MU-BA	aba	vubuka
+omukulembezi	MU-BA	omu	kulembezi
+abakulembeze	MU-BA	aba	kulembeze
+omusawo	MU-BA	omu	sawo
+abasawo	MU-BA	aba	sawo
+omupoliisi	MU-BA	omu	poliisi
+abapoliisi	MU-BA	aba	poliisi
+
+
+# ============================================================
+# MU-MI Extension (Objects, Nature, Body Parts)
+# ============================================================
+
+omutwe	MU-MI	omu	twe
+emitwe	MU-MI	emi	twe
+
+omutima	MU-MI	omu	tima
+emitima	MU-MI	emi	tima
+
+omubiri	MU-MI	omu	biri
+emibiri	MU-MI	emi	biri
+
+omukono	MU-MI	omu	kono
+emikono	MU-MI	emi	kono
+
+omukono	MU-MI	omu	kono
+emikono	MU-MI	emi	kono
+
+omugongo	MU-MI	omu	gongo
+emigongo	MU-MI	emi	gongo
+
+omugugu	MU-MI	omu	gugu
+emigugu	MU-MI	emi	gugu
+
+omusiri	MU-MI	omu	siri
+emisiri	MU-MI	emi	siri
+
+omusiri	MU-MI	omu	siri
+emisiri	MU-MI	emi	siri
+
+omugano	MU-MI	omu	gano
+emigano	MU-MI	emi	gano
+
+omusango	MU-MI	omu	sango
+emisango	MU-MI	emi	sango
+
+omukisa	MU-MI	omu	kisa
+emikisa	MU-MI	emi	kisa
+
+omugaso	MU-MI	omu	gaso
+emigaso	MU-MI	emi	gaso
+
+omutindo	MU-MI	omu	tindo
+emitindo	MU-MI	emi	tindo
+
+
+# ============================================================
+# LI-MA Extension
+# ============================================================
+
+eggulu	LI-MA	eri	ggulu
+amaggulu	LI-MA	ama	ggulu
+
+ejjinja	LI-MA	eri	jjinja
+amajjinja	LI-MA	ama	jjinja
+
+eryato	LI-MA	eri	yato
+amato	LI-MA	ama	to
+
+erinnya	LI-MA	eri	nnya
+amannya	LI-MA	ama	nnya
+
+erinnungu	LI-MA	eri	nungu
+amannungu	LI-MA	ama	nungu
+
+eggulu	LI-MA	eri	ggulu
+amaggulu	LI-MA	ama	ggulu
+
+ekisaka	LI-MA	eri	saka
+amasaka	LI-MA	ama	saka
+
+eddoboozi	LI-MA	eri	ddoboozi
+amaddoboozi	LI-MA	ama	ddoboozi
+
+eriiso	LI-MA	eri	iiso
+amaaso	LI-MA	ama	aaso
+
+ejjembe	LI-MA	eri	jjembe
+amajjembe	LI-MA	ama	jjembe
+
+
+# ============================================================
+# KI-BI Extension
+# ============================================================
+
+ekisaani	KI-BI	eki	saani
+ebisaani	KI-BI	ebi	saani
+
+ekyuma	KI-BI	eki	yuma
+ebyuma	KI-BI	ebi	yuma
+
+ekikopo	KI-BI	eki	kopo
+ebikopo	KI-BI	ebi	kopo
+
+ekyapa	KI-BI	eki	yapa
+ebyapa	KI-BI	ebi	yapa
+
+ekikalu	KI-BI	eki	kalu
+ebikalu	KI-BI	ebi	kalu
+
+ekisulo	KI-BI	eki	sulo
+ebisulo	KI-BI	ebi	sulo
+
+ekyuma	KI-BI	eki	yuma
+ebyuma	KI-BI	ebi	yuma
+
+ekirabo	KI-BI	eki	rabo
+ebirabo	KI-BI	ebi	rabo
+
+ekifo	KI-BI	eki	fo
+ebifo	KI-BI	ebi	fo
+
+ekitundu	KI-BI	eki	tundu
+ebitundu	KI-BI	ebi	tundu
+
+ekikopo	KI-BI	eki	kopo
+ebikopo	KI-BI	ebi	kopo
+
+
+# ============================================================
+# N Class Extension
+# ============================================================
+
+embazzi	N	em	bazzi
+enkoko	N	en	koko
+embazzi	N	em	bazzi
+
+enkoko	N	en	koko
+enkoko	N	en	koko
+
+engabi	N	en	gabi
+empuku	N	em	puku
+
+enkoko	N	en	koko
+ente	N	en	te
+
+ensolo	N	en	solo
+ennimi	N	en	nimi
+
+ennyumba	N	en	nyumba
+ensonga	N	en	songa
+
+enkuba	N	en	kuba
+enkuba	N	en	kuba
+
+empapula	N	em	papula
+
+empewo	N	em	pewo
+
+enkuba	N	en	kuba
+
+ensonga	N	en	songa
+
+ennono	N	en	nono
+
+engeri	N	en	geri
+
+
+# ============================================================
+# LU-N Extension
+# ============================================================
+
+olugendo	LU-N	olu	gendo
+engendo	LU-N	en	gendo
+
+oluyimba	LU-N	olu	yimba
+enyimba	LU-N	en	yimba
+
+olusuku	LU-N	olu	suku
+ensuku	LU-N	en	suku
+
+olukalala	LU-N	olu	kalala
+enkalala	LU-N	en	kalala
+
+olugalo	LU-N	olu	galo
+engalo	LU-N	en	galo
+
+olugendo	LU-N	olu	gendo
+engendo	LU-N	en	gendo
+
+oluganda	LU-N	olu	ganda
+enganda	LU-N	en	ganda
+
+olukwe	LU-N	olu	kwe
+enkwe	LU-N	en	kwe
+
+
+# ============================================================
+# KA-BU Extension
+# ============================================================
+
+akatabo	KA-BU	aka	tabo
+obutabo	KA-BU	obu	tabo
+
+akantu	KA-BU	aka	ntu
+obuntu	KA-BU	obu	ntu
+
+akabira	KA-BU	aka	bira
+obubira	KA-BU	obu	bira
+
+akawala	KA-BU	aka	wala
+obuwala	KA-BU	obu	wala
+
+akamasa	KA-BU	aka	masa
+obumasa	KA-BU	obu	masa
+
+
+# ============================================================
+# BU Class Extension
+# ============================================================
+
+obukugu	BU	obu	kugu
+obwavu	BU	obu	wavu
+obugagga	BU	obu	gagga
+obutonde	BU	obu	tonde
+obwenkanya	BU	obu	enkanya
+obwesigwa	BU	obu	esigwa
+obuvumu	BU	obu	vumu
+obugumiikiriza	BU	obu	gumiikiriza
+obulamu	BU	obu	lamu
+obulungi	BU	obu	lungi
+
+
+# ============================================================
+# FALSE POSITIVES Extension
+# ============================================================
+
+kito	FALSE	-	kito
+kiboko	FALSE	-	kiboko
+kibu	FALSE	-	kibu
+mukono	FALSE	-	mukono
+muganda	FALSE	-	muganda
+mukasa	FALSE	-	mukasa
+mukazi	FALSE	-	mukazi
+mugisha	FALSE	-	mugisha
+kintu	FALSE	-	kintu
+buntu	FALSE	-	buntu
