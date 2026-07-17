@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "luganda-normalizer"
+name = "luganda-text-normalizer"
 version = "0.1.0"
 description = "Preprocessing utilities (cleaning, elision expansion, abbreviation/acronym expansion, currency and date/time expansion, number-to-words expansion, tokenization, spelling standardization, noun/verb morphology stripping, code-switching detection) for Luganda NLP pipelines."
 readme = "README.md"
