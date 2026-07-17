@@ -12,6 +12,30 @@ license = { text = "MIT" }
 authors = [
     { name = "Oketch Benjamin Othieno, Ariho Manson Shawn, Nakato Hidayah, Kwagala Jonathan, Charis Opol" }
 ]
+keywords = [
+    "luganda",
+    "nlp",
+    "text-normalization",
+    "tokenization",
+    "low-resource-languages",
+    "african-languages",
+    "uganda",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Natural Language :: Other",
+]
 dependencies = [
     "nltk>=3.8",
 ]
@@ -22,7 +46,9 @@ dev = [
 ]
 
 [project.urls]
+Homepage = "https://github.com/Ministry-of-ICT-Internship-2026/Luganda-Text-Normalizer"
 Repository = "https://github.com/Ministry-of-ICT-Internship-2026/Luganda-Text-Normalizer"
+"Bug Tracker" = "https://github.com/Ministry-of-ICT-Internship-2026/Luganda-Text-Normalizer/issues"
 
 # The importable package is "normalizer" (matches every internal import in
 # this codebase and all existing tests), even though the pip/PyPI
